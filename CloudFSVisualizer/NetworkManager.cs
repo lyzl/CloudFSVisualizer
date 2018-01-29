@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SshNet;
 using CloudFSVisualizer.Model;
+using Renci.SshNet;
 
 namespace CloudFSVisualizer
 {
@@ -40,15 +41,17 @@ namespace CloudFSVisualizer
             }
         }
 
-        public static void CreateSSHToServers(List<Server> servers)
+        public static SshClient CreateSSHClinetToNode(Node node)
         {
-            foreach (var server in servers)
-            {
-                var host = server.
-            }
-            var host = 
+            var SSHHost = node.Host;
+            var SSHUser = node.User;
+            var SSHPswd = node.pswd;
+            var auth = new PasswordAuthenticationMethod(SSHUser, SSHPswd);
+            var info = new ConnectionInfo(SSHHost, SSHUser, auth);
+            return new SshClient(info);
         }
-        public static void CreateSSHToNodes()
+
+        public static void UploadFileToNode(Node node)
         {
 
         }
