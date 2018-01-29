@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using CloudFSVisualizer.Model;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -22,9 +23,15 @@ namespace CloudFSVisualizer
     /// </summary>
     public sealed partial class ServerDetailPage : Page
     {
+        public List<Node> nodeList;
         public ServerDetailPage()
         {
             this.InitializeComponent();
+        }
+
+        private void ServerDetailListGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+
         }
     }
 }

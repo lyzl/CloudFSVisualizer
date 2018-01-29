@@ -5,9 +5,41 @@
     xmlns:local="using:CloudFSVisualizer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="using:CloudFSVisualizer.Model"
     mc:Ignorable="d">
-
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Page.Resources>
+        <CollectionViewSource
+            x:Key="NodeTypeViewSource" Source="{x:Bind serverList}">
+            
+        </CollectionViewSource>
+    </Page.Resources>
+    <Grid>
+        <SemanticZoom
+            Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <SemanticZoom.ZoomedInView>
+            <ListView
+                ItemsSource="{x:Bind serverList}"
+                x:Name="ServerListGridView"
+                ItemClick="ServerListGridView_ItemClick"
+                IsItemClickEnabled="true">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Server">
+                        <local:ServerItemUC 
+                            Height="300"
+                            Width="400"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </SemanticZoom.ZoomedInView>
+        
+        <SemanticZoom.ZoomedOutView>
+            <ListView>
+                <TextBlock>hello</TextBlock>
+            </ListView>
+        </SemanticZoom.ZoomedOutView>
+    </SemanticZoom>
     </Grid>
+    
+
+    
 </Page>

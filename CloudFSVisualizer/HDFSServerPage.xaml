@@ -1,0 +1,25 @@
+﻿<Page
+    x:Class="CloudFSVisualizer.HDFSServerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CloudFSVisualizer"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="using:CloudFSVisualizer.Model"
+    mc:Ignorable="d">
+
+    <ListView
+        ItemsSource="{x:Bind ServerList}"
+        x:Name="ServerListGridView"
+        ItemClick="ServerListGridView_ItemClick"
+        IsItemClickEnabled="true"
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="model:HDFSServer">
+                <local:ServerItemUC 
+                    Height="300"
+                    Width="400"/>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</Page>

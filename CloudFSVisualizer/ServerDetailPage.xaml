@@ -5,9 +5,20 @@
     xmlns:local="using:CloudFSVisualizer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="using:CloudFSVisualizer.Model"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-    </Grid>
+    <GridView
+        x:Name="ServerDetailListGridView"
+        ItemClick="ServerDetailListGridView_ItemClick"
+        IsItemClickEnabled="True"
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <GridView ItemsSource="{x:Bind nodeList}">
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="model:Node">
+                    <local:NodeItemUC/>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+    </GridView>
 </Page>

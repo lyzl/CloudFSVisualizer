@@ -13,11 +13,13 @@ namespace CloudFSVisualizer.Model
         public String Desc { get; set; }
         public Type Dest { get; set; }
 
-        NavigationPage(IconElement icon, String desc, Type dest)
+        public NavigationPage(IconElement icon, String desc, Type dest)
         {
             this.Icon = icon;
             this.Desc = desc;
             this.Dest = dest;
         }
+
+        public NavigationPage() { }
     }
 }

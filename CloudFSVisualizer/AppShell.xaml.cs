@@ -23,11 +23,16 @@ namespace CloudFSVisualizer.Assets
     /// </summary>
     public sealed partial class AppShell : Page
     {
-        List<NavigationPage> pages;
+        List<NavigationPage> Pages { get; set; }
         public AppShell()
         {
             this.InitializeComponent();
-            pages = new List<NavigationPage>();
+            Pages = new List<NavigationPage>()
+            {
+                new NavigationPage(new SymbolIcon(Symbol.Accept),"HDFS Servers",typeof(HDFSServerPage)),
+                new NavigationPage(new SymbolIcon(Symbol.Accept),"Yarn Servers",typeof(YarnServerPage))
+            };
+            Bindings.Update();
         }
 
         private void AppShellNavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -40,6 +45,7 @@ namespace CloudFSVisualizer.Assets
             {
                 var selectedItem = args.SelectedItem as NavigationPage;
                 AppContentFrame.Navigate(selectedItem.Dest);
+                AppShellNavigationView.Header = selectedItem.Desc;
             }
         }
     }
