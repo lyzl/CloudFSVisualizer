@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using SshNet;
 using CloudFSVisualizer.Model;
 using Renci.SshNet;
+using Windows.Storage;
 
 namespace CloudFSVisualizer
 {
@@ -51,9 +52,33 @@ namespace CloudFSVisualizer
             return new SshClient(info);
         }
 
-        public static void UploadFileToNode(Node node)
+        public static async void UploadFileToNode(StorageFile storageFile, Node node, string remotePath)
         {
+            var SSHHost = node.Host;
+            var SSHUser = node.User;
+            var SSHPswd = node.pswd;
+            var auth = new PasswordAuthenticationMethod(SSHUser, SSHPswd);
+            var info = new ConnectionInfo(SSHHost, SSHUser, auth);
+            using (var client = new SftpClient(info))
+            using (var fileStream = await storageFile.OpenStreamForReadAsync())
+            {
 
+                client.UploadFile(fileStream, remotePath);
+            }
+        }
+
+        public static async void DownloadFileFromNode(StorageFile storageFile, Node node, string remotePath)
+        {
+            var SSHHost = node.Host;
+            var SSHUser = node.User;
+            var SSHPswd = node.pswd;
+            var auth = new PasswordAuthenticationMethod(SSHUser, SSHPswd);
+            var info = new ConnectionInfo(SSHHost, SSHUser, auth);
+            using (var client = new SftpClient(info))
+            using (var fileStream = await storageFile.OpenStreamForWriteAsync())
+            {
+                client.DownloadFile(remotePath, fileStream);
+            }
         }
     }
 }

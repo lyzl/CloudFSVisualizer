@@ -17,7 +17,7 @@ namespace CloudFSVisualizer
             var node = new HadoopNode()
             {
                 Description = "default node description",
-                Host = "http://172.18.84.45:50070"
+                Host = "172.18.84.45:50070"
             };
             var nodeList = new List<Node>();
             nodeList.Add(node);
@@ -37,7 +37,7 @@ namespace CloudFSVisualizer
             }
             else
             {
-                queryUrl = string.Format(@"{0}/jmx?qry={1}", node.Host, query);
+                queryUrl = string.Format(@"http://{0}/jmx?qry={1}", node.Host, query);
             }
 
             var serializer = new JsonSerializer();

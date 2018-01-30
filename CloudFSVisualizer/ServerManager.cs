@@ -19,7 +19,8 @@ namespace CloudFSVisualizer
             try
             { 
                 var localFolder = ApplicationData.Current.LocalFolder;
-                if (File.Exists(string.Format("{0}\\{1}",localFolder.Path, "HDFSServersInfo.json")))
+                
+                if (File.Exists($@"{localFolder.Path}\\HDFSServersInfo.json"))
                 {
                     var serversInfoFile = await localFolder.GetFileAsync("HDFSServersInfo.json");
                     var serializer = new JsonSerializer();
@@ -60,7 +61,7 @@ namespace CloudFSVisualizer
                 var localFolder = ApplicationData.Current.LocalFolder;
                 StorageFile serversInfoFile ;
                 serversInfoFile = await localFolder.GetFileAsync("HDFSServersInfo.json");
-                if (File.Exists(string.Format("{0}\\{1}",localFolder.Path, "HDFSServersInfo.json")))
+                if (File.Exists($@"{localFolder.Path}\\HDFSServersInfo.json"))
                 {
                     serversInfoFile = await localFolder.GetFileAsync("HDFSServersInfo.json");
                 }
