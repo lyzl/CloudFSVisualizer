@@ -30,8 +30,7 @@ namespace CloudFSVisualizer.Assets
             Pages = new List<NavigationPage>()
             {
                 new NavigationPage(new SymbolIcon(Symbol.Accept),"HDFS Servers",typeof(HDFSServerPage)),
-                new NavigationPage(new SymbolIcon(Symbol.Accept),"Yarn Servers",typeof(YarnServerPage)),
-                new NavigationPage(new SymbolIcon(Symbol.Accept),"Yarn Servers",typeof(HDFSVisualizationPage))
+                new NavigationPage(new SymbolIcon(Symbol.Accept),"Yarn Servers",typeof(YarnServerPage))
             };
             Bindings.Update();
         }

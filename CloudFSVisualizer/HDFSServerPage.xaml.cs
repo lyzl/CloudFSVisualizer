@@ -33,7 +33,7 @@ namespace CloudFSVisualizer
                 SType = Server.ServerType.HDFSServer,
                 MasterNode = new HDFSMasterNode
                 {
-                    Host = @"http://172.18.84.45:50070",
+                    Host = "172.18.84.45",
                     Description = "master"
 
                 },
@@ -41,12 +41,12 @@ namespace CloudFSVisualizer
                 {
                     new HDFSSlaverNode
                     {
-                        Host = @"http://172.18.84.37:50075",
+                        Host = "172.18.84.37",
                         Description = "slave"
                     },
                      new HDFSSlaverNode
                     {
-                        Host = @"http://172.18.84.44:50075",
+                        Host = "172.18.84.44",
                         Description = "slave"
                     }
                 }
@@ -54,11 +54,11 @@ namespace CloudFSVisualizer
             GetServer();
             //ServerList.Add(hadoopServer);
             //ServerManager.StoreHDFSServerListToFileAsync(ServerList);
-            var status = HDFSFileManager.GetFileStatus(new HDFSFile
-            {
-                ServerHost = @"172.18.84.45:50070",
-                Path = @"/user/hadoop/files/testFile/LICENSE"
-            });
+            //var status = HDFSFileManager.GetFileStatus(new HDFSFile
+            //{
+            //    ServerHost = @"172.18.84.45:50070",
+            //    Path = @"/user/hadoop/files/testFile/LICENSE"
+            //});
         }
         public async void GetServer()
         {

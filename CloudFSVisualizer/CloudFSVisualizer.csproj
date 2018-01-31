@@ -98,15 +98,18 @@
     <Compile Include="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BlockPresenterUC.xaml.cs">
+      <DependentUpon>BlockPresenterUC.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HDFSFileManager.cs" />
+    <Compile Include="HDFSFilePage.xaml.cs">
+      <DependentUpon>HDFSFilePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HDFSServerDetailPage.xaml.cs">
       <DependentUpon>HDFSServerDetailPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="HDFSServerPage.xaml.cs">
       <DependentUpon>HDFSServerPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="HDFSVisualizationPage.xaml.cs">
-      <DependentUpon>HDFSVisualizationPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\HDFSFile.cs" />
     <Compile Include="Model\NavigationPage.cs" />
@@ -161,6 +164,9 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.0.5</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
+      <Version>2.1.1</Version>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>10.0.3</Version>
     </PackageReference>
@@ -173,15 +179,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="BlockPresenterUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HDFSFilePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="HDFSServerDetailPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="HDFSServerPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="HDFSVisualizationPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

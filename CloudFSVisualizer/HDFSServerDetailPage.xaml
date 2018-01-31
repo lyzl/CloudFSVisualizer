@@ -7,19 +7,49 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model ="using:CloudFSVisualizer.Model"
     mc:Ignorable="d">
-
-    <GridView
-        x:Name="ServerDetailListGridView"
-        ItemClick="ServerDetailListGridView_ItemClick"
-        IsItemClickEnabled="True"
-        ItemsSource="{x:Bind HDFSNodeList}"
-        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <GridView.ItemTemplate>
-            <DataTemplate x:DataType="model:Node">
-                <local:NodeItemUC 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel 
+                Orientation="Vertical"
+                Grid.Column="1">
+                <Button
+                    x:Name="HDFSFilePageButton"
+                    Grid.Column="1"
+                    Click="HDFSFilePageButton_Click"
+                    Content="file manage"/>
+                <Button
+                    x:Name="HDFSConfigurationButton"
+                    Grid.Column="1"
+                    Click="HDFSConfigurationButton_Click"
+                    Content="configuration"/>
+            </StackPanel>
+            
+        </Grid>
+        <ScrollViewer
+            Grid.Row="1">
+            <GridView
+                x:Name="ServerDetailListGridView"
+                ItemClick="ServerDetailListGridView_ItemClick"
+                IsItemClickEnabled="True"
+                ItemsSource="{x:Bind HDFSNodeList}"
+                Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                <GridView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Node">
+                        <local:NodeItemUC 
                     Height="200"
                     Width="300"/>
-            </DataTemplate>
-        </GridView.ItemTemplate>
-    </GridView>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </ScrollViewer>
+    </Grid>
+    
 </Page>

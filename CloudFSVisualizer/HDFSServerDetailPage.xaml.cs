@@ -45,5 +45,15 @@ namespace CloudFSVisualizer
         {
 
         }
+
+        private void HDFSFilePageButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(HDFSFilePage));
+        }
+
+        private void HDFSConfigurationButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
