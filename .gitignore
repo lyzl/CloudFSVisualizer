@@ -1,2 +1,5 @@
 /CloudFSVisualizer/bin
 /CloudFSVisualizer/obj
+*.json
+*.ide
+.vs/CloudFSVisualizer/v15/.suo
