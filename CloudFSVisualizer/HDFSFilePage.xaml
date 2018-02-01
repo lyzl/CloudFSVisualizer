@@ -5,26 +5,48 @@
     xmlns:local="using:CloudFSVisualizer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:model="using:CloudFSVisualizer.Model"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <controls:BladeView
-            Grid.Row="2"
-            ItemsSource="{x:Bind PresentList}">
-            <controls:BladeView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Width="400">
-                        <TextBlock>node name</TextBlock>
-                        <local:BlockPresenterUC/>
-                    </StackPanel>
+        <ListView
+            x:Name="HDFSFileListView"
+            Grid.Row="1"
+            ItemsSource="{x:Bind FileList}"
+            IsItemClickEnabled="True"
+            ItemClick="HDFSFileListView_ItemClickAsync">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:HDFSFile">
+                    <TextBlock Text="{x:Bind Path}"/>
                 </DataTemplate>
-            </controls:BladeView.ItemTemplate>
-        </controls:BladeView>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ScrollViewer
+            Grid.Row="2"
+            ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+            ScrollViewer.HorizontalScrollMode="Enabled"                  
+            ScrollViewer.VerticalScrollMode="Disabled">
+            <ItemsControl 
+            ItemsSource="{x:Bind PresentList}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Background="Transparent" Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Width="400">
+                            <local:BlockPresenterUC/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </Page>
