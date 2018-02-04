@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using CloudFSVisualizer.Model;
+using Windows.UI.Core;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -33,6 +34,29 @@ namespace CloudFSVisualizer.Assets
                 new NavigationPage(new SymbolIcon(Symbol.Accept),"Yarn Servers",typeof(YarnServerPage))
             };
             Bindings.Update();
+            AppContentFrame.Navigated += AppContentFrame_Navigated;
+            SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+            AppContentFrame.CanGoBack ?
+            AppViewBackButtonVisibility.Visible :
+            AppViewBackButtonVisibility.Collapsed;
+        }
+
+        private void OnBackRequested(object sender, BackRequestedEventArgs e)
+        {
+            if (AppContentFrame.CanGoBack)
+            {
+                e.Handled = true;
+                AppContentFrame.GoBack();
+            }
+        }
+
+        private void AppContentFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+        ((Frame)sender).CanGoBack ?
+        AppViewBackButtonVisibility.Visible :
+        AppViewBackButtonVisibility.Collapsed;
         }
 
         private void AppShellNavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
