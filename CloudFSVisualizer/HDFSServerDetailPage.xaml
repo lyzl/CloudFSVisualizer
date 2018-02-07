@@ -24,12 +24,14 @@
                     x:Name="HDFSFilePageButton"
                     Grid.Column="1"
                     Click="HDFSFilePageButton_Click"
-                    Content="file manage"/>
+                    Content="file manage"
+                    Margin="20"/>
                 <Button
                     x:Name="HDFSConfigurationButton"
                     Grid.Column="1"
                     Click="HDFSConfigurationButton_Click"
-                    Content="configuration"/>
+                    Content="configuration"
+                    Margin="20"/>
             </StackPanel>
             
         </Grid>
@@ -38,16 +40,30 @@
             <GridView
                 x:Name="ServerDetailListGridView"
                 ItemClick="ServerDetailListGridView_ItemClick"
+                SizeChanged="ServerDetailListGridView_SizeChanged"
                 IsItemClickEnabled="True"
                 ItemsSource="{x:Bind HDFSNodeList}"
                 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                 <GridView.ItemTemplate>
-                    <DataTemplate x:DataType="model:Node">
+                    <DataTemplate
+                        x:DataType="model:Node">
                         <local:NodeItemUC 
-                    Height="200"
-                    Width="300"/>
+                            Height="300"
+                            Width="400"
+                            />
                     </DataTemplate>
                 </GridView.ItemTemplate>
+                <GridView.ItemContainerStyle>
+                    <Style TargetType="GridViewItem">
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="VerticalAlignment" Value="Stretch"/>
+                    </Style>
+                </GridView.ItemContainerStyle>
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
             </GridView>
         </ScrollViewer>
     </Grid>

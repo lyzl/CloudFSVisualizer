@@ -46,7 +46,7 @@ namespace CloudFSVisualizer
         {
             var SSHHost = node.Host;
             var SSHUser = node.User;
-            var SSHPswd = node.pswd;
+            var SSHPswd = node.Pswd;
             var auth = new PasswordAuthenticationMethod(SSHUser, SSHPswd);
             var info = new ConnectionInfo(SSHHost, SSHUser, auth);
             return new SshClient(info);
@@ -56,7 +56,7 @@ namespace CloudFSVisualizer
         {
             var SSHHost = node.Host;
             var SSHUser = node.User;
-            var SSHPswd = node.pswd;
+            var SSHPswd = node.Pswd;
             var auth = new PasswordAuthenticationMethod(SSHUser, SSHPswd);
             var info = new ConnectionInfo(SSHHost, SSHUser, auth);
             using (var client = new SftpClient(info))
@@ -71,7 +71,7 @@ namespace CloudFSVisualizer
         {
             var SSHHost = node.Host;
             var SSHUser = node.User;
-            var SSHPswd = node.pswd;
+            var SSHPswd = node.Pswd;
             var auth = new PasswordAuthenticationMethod(SSHUser, SSHPswd);
             var info = new ConnectionInfo(SSHHost, SSHUser, auth);
             using (var client = new SftpClient(info))
