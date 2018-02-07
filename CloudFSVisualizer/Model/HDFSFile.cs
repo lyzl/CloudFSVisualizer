@@ -69,6 +69,119 @@ namespace CloudFSVisualizer.Model
         public string type { get; set; }
     }
 
+    public class Block
+    {
+        public int blockId { get; set; }
+        public string blockPoolId { get; set; }
+        public int generationStamp { get; set; }
+        public int numBytes { get; set; }
+    }
+
+    public class BlockToken
+    {
+        public string urlString { get; set; }
+    }
+
+    public class Location
+    {
+        public string adminState { get; set; }
+        public object blockPoolUsed { get; set; }
+        public int cacheCapacity { get; set; }
+        public int cacheUsed { get; set; }
+        public object capacity { get; set; }
+        public object dfsUsed { get; set; }
+        public string hostName { get; set; }
+        public int infoPort { get; set; }
+        public int infoSecurePort { get; set; }
+        public string ipAddr { get; set; }
+        public int ipcPort { get; set; }
+        public int lastBlockReportMonotonic { get; set; }
+        public object lastBlockReportTime { get; set; }
+        public object lastUpdate { get; set; }
+        public int lastUpdateMonotonic { get; set; }
+        public string name { get; set; }
+        public string networkLocation { get; set; }
+        public object remaining { get; set; }
+        public string storageID { get; set; }
+        public int xceiverCount { get; set; }
+        public int xferPort { get; set; }
+    }
+
+    public class LastLocatedBlock
+    {
+        public Block block { get; set; }
+        public BlockToken blockToken { get; set; }
+        public List<object> cachedLocations { get; set; }
+        public bool isCorrupt { get; set; }
+        public List<Location> locations { get; set; }
+        public long startOffset { get; set; }
+        public List<string> storageTypes { get; set; }
+    }
+
+    public class Block2
+    {
+        public int blockId { get; set; }
+        public string blockPoolId { get; set; }
+        public int generationStamp { get; set; }
+        public int numBytes { get; set; }
+    }
+
+    public class BlockToken2
+    {
+        public string urlString { get; set; }
+    }
+
+    public class Location2
+    {
+        public string adminState { get; set; }
+        public object blockPoolUsed { get; set; }
+        public int cacheCapacity { get; set; }
+        public int cacheUsed { get; set; }
+        public object capacity { get; set; }
+        public object dfsUsed { get; set; }
+        public string hostName { get; set; }
+        public int infoPort { get; set; }
+        public int infoSecurePort { get; set; }
+        public string ipAddr { get; set; }
+        public int ipcPort { get; set; }
+        public int lastBlockReportMonotonic { get; set; }
+        public object lastBlockReportTime { get; set; }
+        public object lastUpdate { get; set; }
+        public int lastUpdateMonotonic { get; set; }
+        public string name { get; set; }
+        public string networkLocation { get; set; }
+        public object remaining { get; set; }
+        public string storageID { get; set; }
+        public int xceiverCount { get; set; }
+        public int xferPort { get; set; }
+    }
+
+    public class LocatedBlock
+    {
+        public Block2 block { get; set; }
+        public BlockToken2 blockToken { get; set; }
+        public List<object> cachedLocations { get; set; }
+        public bool isCorrupt { get; set; }
+        public List<Location2> locations { get; set; }
+        public object startOffset { get; set; }
+        public List<string> storageTypes { get; set; }
+    }
+
+    public class LocatedBlocks
+    {
+        public long fileLength { get; set; }
+        public bool isLastBlockComplete { get; set; }
+        public bool isUnderConstruction { get; set; }
+        public LastLocatedBlock lastLocatedBlock { get; set; }
+        public List<LocatedBlock> locatedBlocks { get; set; }
+    }
+    /*
+    public class RootObject
+    {
+        public LocatedBlocks LocatedBlocks { get; set; }
+    }
+    */
+
     public sealed class AsyncLazy<T>
     {
         /// <summary>
