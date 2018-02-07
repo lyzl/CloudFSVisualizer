@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 
 namespace CloudFSVisualizer.Model
 {
+    public enum NodeStatus { Unknown, Available, Timeout };
     public class Node
     {
         public string Description { get; set; }
         public string Host { get; set; }
         public string User { get; set; }
-        public string pswd { get; set; }
+        public string Pswd { get; set; }
+        public Uri PrivateKey { get; set; }
     }
 
     public class HadoopNode: Node
     {
-        public NodeOperatingSystem NodeOperatingSystemInfo { get; set; }
+        
     }
 
     public abstract class HDFSNode: HadoopNode
