@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using CloudFSVisualizer.Model;
+using Renci.SshNet;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -43,7 +44,8 @@ namespace CloudFSVisualizer
 
         private void ServerDetailListGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-
+            var item = e.ClickedItem as HDFSNode;
+            Frame.Navigate(typeof(HDFSNodePage), item);
         }
 
         private void HDFSFilePageButton_Click(object sender, RoutedEventArgs e)
@@ -53,7 +55,14 @@ namespace CloudFSVisualizer
 
         private void HDFSConfigurationButton_Click(object sender, RoutedEventArgs e)
         {
+            //Frame.Navigate(NodeConfigurationPage, )
+        }
 
+        private void ServerDetailListGridView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var columns = Math.Ceiling(ActualWidth / 400);
+            (ServerDetailListGridView.ItemsPanelRoot as ItemsWrapGrid).ItemWidth = e.NewSize.Width / columns;
+            
         }
     }
 }
