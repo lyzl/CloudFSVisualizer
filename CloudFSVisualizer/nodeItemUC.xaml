@@ -8,17 +8,14 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-
-    <Grid>
-        <Grid
-            Background="LightBlue">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock
-                VerticalAlignment="Center"
-                Text="{x:Bind NodeItem.Host}"/>
-        </Grid>
+    <UserControl.Resources>
+        <local:NodeStatusToColorConverter x:Key="ColorConvertor"/>
+    </UserControl.Resources>
+    <Grid
+        Background="{x:Bind Status, Converter={StaticResource ColorConvertor}}">
+        <TextBlock
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Text="{x:Bind NodeItem.Host}"/>
     </Grid>
 </UserControl>
