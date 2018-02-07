@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using CloudFSVisualizer.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Windows.Networking.Sockets;
 
 namespace CloudFSVisualizer
 {
     public class NodeManager
     {
+        
         public static List<Node> GetNodeList()
         {
             var node = new HadoopNode()
@@ -26,36 +28,55 @@ namespace CloudFSVisualizer
             return nodeList;
         }
 
-        public static async Task<NodeOperatingSystem> FetchNodeOperatingSystemInfo(HadoopNode node, string query)
+        public static async Task<NodeOperatingSystem> FetchNodeOperatingSystemInfo(HadoopNode node)
         {
-            string queryUrl;
-            NodeOperatingSystem Info;
+            string queryUrl = $@"http://{node.Host}:50070/jmx?qry=java.lang:type=OperatingSystem";
+            var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
+            JObject rootObject = JObject.Parse(json);
+            JToken infoToken = rootObject["beans"].Children().ToList().First();
+            var info = infoToken.ToObject<NodeOperatingSystem>();
+            return info;
+        }
 
-            if (query == null)
+        public static async Task<NodeStatus> GetNodeConnectionStatus(Node node)
+        {
+
+            NodeStatus status = NodeStatus.Unknown;
+            string port;
+            if (node is HDFSMasterNode)
             {
-                queryUrl = node.Host;
+                port = "50070";
+            }
+            else if (node is HDFSSlaverNode)
+            {
+                port = "50075";
             }
             else
             {
-                queryUrl = string.Format(@"http://{0}/jmx?qry={1}", node.Host, query);
+                port = "80";
             }
 
-            var serializer = new JsonSerializer();
-            using (var stream = await NetworkManager.FetchStreamDataFromUri(new Uri(query)))
-            using (var sr = new StreamReader(stream))
-            using (var jsonTextReader = new JsonTextReader(sr))
+            try
             {
-                if (stream != null)
+                using (var tcpClient = new StreamSocket())
                 {
-                    jsonTextReader.Read();
-                    Info = serializer.Deserialize<NodeOperatingSystem>(jsonTextReader);
+                    await tcpClient.ConnectAsync(
+                        new Windows.Networking.HostName(node.Host),
+                        port,
+                        SocketProtectionLevel.PlainSocket).AsTask();
+
+                    var localIp = tcpClient.Information.LocalAddress.DisplayName;
+                    var remoteIp = tcpClient.Information.RemoteAddress.DisplayName;
+                    tcpClient.Dispose();
                 }
-                else
-                {
-                    Info = null;
-                }
+                status = NodeStatus.Available;
             }
-            return Info;
+            catch (Exception)
+            {
+                status = NodeStatus.Timeout;
+            }
+
+            return status;
         }
 
     }
