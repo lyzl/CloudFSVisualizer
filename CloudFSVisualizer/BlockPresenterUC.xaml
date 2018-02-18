@@ -10,7 +10,11 @@
     d:DesignWidth="400">
 
     <GridView
-        ItemsSource="{x:Bind Blocks}">
+        ScrollViewer.VerticalScrollBarVisibility="Auto"
+        ScrollViewer.VerticalScrollMode="Enabled"
+        Height="500"
+        ItemsSource="{x:Bind LocationDict}"
+        Background="Red">
         <GridView.ItemTemplate>
             <DataTemplate>
                 <Rectangle
