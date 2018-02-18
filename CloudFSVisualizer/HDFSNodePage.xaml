@@ -5,21 +5,69 @@
     xmlns:local="using:CloudFSVisualizer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:telerik="using:Telerik.UI.Xaml.Controls.Chart"
     mc:Ignorable="d">
+    <Page.Resources>
+        <local:UsedMemoryPercentageConverter x:Key="UsedMemoryPercentageConverter"/>
+    </Page.Resources>
+    <ScrollViewer
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+        HorizontalScrollMode="Disabled"
+        HorizontalScrollBarVisibility="Disabled">
+        <StackPanel>
+            <Grid>
+                <Button
+                    Content="restart"
+                    x:Name="NodeConfigurationButton"
+                    Click="NodeConfigurationButton_Click">
+                </Button>
+            </Grid>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Button
-            Content="restart"
-            x:Name="NodeConfigurationButton"
-            Click="NodeConfigurationButton_Click"></Button>
-        <Grid
-            Grid.Row="1"
-            Background="LightSlateGray">
+            <telerik:RadCartesianChart
+                    x:Name="MemoryChart"
+                    PaletteName="DefaultLight"
+                    Height="400">
+                <telerik:RadCartesianChart.HorizontalAxis>
+                    <telerik:CategoricalAxis/>
+                </telerik:RadCartesianChart.HorizontalAxis>
+                <telerik:RadCartesianChart.VerticalAxis>
+                    <telerik:LinearAxis/>
+                </telerik:RadCartesianChart.VerticalAxis>
+                <telerik:RadCartesianChart.Grid>
+                    <telerik:CartesianChartGrid MajorLinesVisibility="Y"/>
+                </telerik:RadCartesianChart.Grid>
+                <telerik:SplineAreaSeries x:Name="MemoryChartAreaSeries" ItemsSource="{x:Bind SysInfoList}"/>
+            </telerik:RadCartesianChart>
 
-        </Grid>
-    </Grid>
+            <telerik:RadCartesianChart
+                    x:Name="SwapSpaceChart"
+                    PaletteName="DefaultLight"
+                    Height="400">
+                <telerik:RadCartesianChart.HorizontalAxis>
+                    <telerik:CategoricalAxis/>
+                </telerik:RadCartesianChart.HorizontalAxis>
+                <telerik:RadCartesianChart.VerticalAxis>
+                    <telerik:LinearAxis/>
+                </telerik:RadCartesianChart.VerticalAxis>
+                <telerik:RadCartesianChart.Grid>
+                    <telerik:CartesianChartGrid MajorLinesVisibility="Y"/>
+                </telerik:RadCartesianChart.Grid>
+                <telerik:SplineAreaSeries
+                    ItemsSource="{x:Bind SysInfoList}"
+                    CombineMode="Stack">
+                    <telerik:SplineAreaSeries.ValueBinding>
+                        <telerik:PropertyNameDataPointBinding PropertyName="SystemCpuLoad"/>
+                    </telerik:SplineAreaSeries.ValueBinding>
+                </telerik:SplineAreaSeries>
+                <telerik:SplineAreaSeries
+                    ItemsSource="{x:Bind SysInfoList}"
+                    CombineMode="Stack">
+                    <telerik:SplineAreaSeries.ValueBinding>
+                        <telerik:PropertyNameDataPointBinding PropertyName="ProcessCpuLoad"/>
+                    </telerik:SplineAreaSeries.ValueBinding>
+                </telerik:SplineAreaSeries>
+            </telerik:RadCartesianChart>
+        </StackPanel>
+    </ScrollViewer>
+    
 </Page>
