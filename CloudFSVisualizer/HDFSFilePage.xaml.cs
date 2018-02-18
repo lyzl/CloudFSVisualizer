@@ -16,8 +16,6 @@ using CloudFSVisualizer.Model;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Collections.Specialized;
-using Windows.UI.Core;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -28,50 +26,26 @@ namespace CloudFSVisualizer
     /// </summary>
     public sealed partial class HDFSFilePage : Page, INotifyPropertyChanged
     {
-        public HDFSServer CurrentServer { get; set; }
-
-        private Dictionary<string, List<LocatedBlock>> locationDict;
-        public Dictionary<string, List<LocatedBlock>> LocationDict {
-            get { return locationDict; }
-            set
-            {
-                locationDict = value;
-                OnpropertyChanged("LocationDict");
-            }
-        }
-
-        private List<LocatedBlock> blockList;
-
-        public List<LocatedBlock> BlockList
-        {
-            get { return blockList; }
-            set
-            {
-                blockList = value;
-                OnpropertyChanged("BlockList");
-            }
-        }
-        private List<HDFSFile> fileList;
+        private List<HDFSFile> filelist;
 
         public List<HDFSFile> FileList
         {
-            get { return fileList; }
+            get { return filelist; }
             set
             {
-                fileList = value;
-                OnpropertyChanged("FileList");
+                filelist = value;
+                OnpropertyChanged("file");
             }
         }
-
-
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public List<int> PresentList { get; set; }
         public HDFSFilePage()
         {
             this.InitializeComponent();
-            BlockList = new List<LocatedBlock>();
-            LocationDict = new Dictionary<string, List<LocatedBlock>>();
-            FileList = new List<HDFSFile>();
+            PresentList = new List<int> { 1, 2, 3 };
+            GetFileSAtatuesAsync();
+            
         }
 
         void OnpropertyChanged(string name)
@@ -79,54 +53,26 @@ namespace CloudFSVisualizer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        public async void GetRootFolderAsync()
+        public async void GetFileSAtatuesAsync()
         {
+            //await NetworkManager.FetchStringDataFromUri(new Uri("http://172.18.84.38:50070/webhdfs/v1//user/hadoop/files/testFile/?op=LISTSTATUS"));
             var file = new HDFSFile()
             {
-                ServerHost = CurrentServer.MasterNode.Host,
-                Path = "/"
+                ServerHost = "172.18.84.38",
+                Path = "/user/hadoop/files/testFile/"
             };
             FileList = await file.SubFile;
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            var item = e.Parameter as HDFSServer;
-            CurrentServer = item;
-            GetRootFolderAsync();
+            Bindings.Update();
         }
 
         private async void HDFSFileListView_ItemClickAsync(object sender, ItemClickEventArgs e)
         {
-            var dict = new Dictionary<string, List<LocatedBlock>>();
-            var item = e.ClickedItem as HDFSFile;
-
-            if ((await item.Status).type == "FILE")
+            var items = e.ClickedItem as HDFSFile;
+            FileList.Clear();
+            foreach (var item in await items.SubFile)
             {
-                BlockList = (await item.GetBlocksAsync()).locatedBlocks;
-                foreach (var block in BlockList)
-                {
-                    foreach (var location in block.locations)
-                    {
-                        if (!dict.ContainsKey(location.hostName))
-                        {
-                            dict.Add(location.hostName, new List<LocatedBlock>() { block });
-                        }
-                        else
-                        {
-                            dict[location.hostName].Add(block);
-                        }
-                    }
-                }
-                LocationDict = dict;
+                filelist.Add(item);
             }
-            else
-            {
-                FileList = await item.SubFile;
-            }
-            //this.Bindings.Update();
         }
-
     }
 }
