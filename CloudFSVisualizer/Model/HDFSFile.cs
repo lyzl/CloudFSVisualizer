@@ -4,12 +4,14 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CloudFSVisualizer.Model
 {
     public class HDFSFile
     {
-        private FileStatus status;
+        
         public string ServerHost { get; set; }
         public string Path { get; set; }
 
@@ -18,25 +20,23 @@ namespace CloudFSVisualizer.Model
         {
             get
             {
-                if (subFile == null)
+                subFile = new AsyncLazy<List<HDFSFile>>(async () =>
                 {
-                    subFile = new AsyncLazy<List<HDFSFile>>(async () =>
-                    {
-                        return await HDFSFileManager.ListDirectory(this);
-                    });
-                }
+                    return await HDFSFileManager.ListDirectory(this);
+                });
                 return subFile;
             }
         }
 
-        public FileStatus Status
+        private AsyncLazy<FileStatus> status;
+        public AsyncLazy<FileStatus> Status
         {
             get
             {
-                if (status == null)
+                status = new AsyncLazy<FileStatus>(async () =>
                 {
-                    status = HDFSFileManager.GetFileStatus(this).Result;
-                }
+                    return await GetFileStatusAsync();
+                });
                 return status;
             }
             set { status = value; }
@@ -49,17 +49,36 @@ namespace CloudFSVisualizer.Model
         }
         public HDFSFile() { }
 
+        public async Task<LocatedBlocks> GetBlocksAsync()
+        {
+            var address = $@"http://{ServerHost}:50070/webhdfs/v1/{Path}?op=GET_BLOCK_LOCATIONS";
+            var json = await NetworkManager.FetchStringDataFromUri(new Uri(address));
+            JObject rootObject = JObject.Parse(json);
+            JToken statusToken = rootObject["LocatedBlocks"];
+            var status = statusToken.ToObject<LocatedBlocks>();
+            return status;
+        }
 
-        
+        public async Task<FileStatus> GetFileStatusAsync()
+        {
+            var address = $@"http://{ServerHost}:50070/webhdfs/v1/{Path}?op=GETFILESTATUS";
+            var json = await NetworkManager.FetchStringDataFromUri(new Uri(address));
+            JObject rootObject = JObject.Parse(json);
+            JToken statusToken = rootObject["FileStatus"];
+            var status = statusToken.ToObject<FileStatus>();
+            return status;
+        }
+
+
     }
     public class FileStatus
     {
         public long accessTime { get; set; }
-        public int blockSize { get; set; }
+        public long blockSize { get; set; }
         public int childrenNum { get; set; }
-        public int fileId { get; set; }
+        public long fileId { get; set; }
         public string group { get; set; }
-        public int length { get; set; }
+        public long length { get; set; }
         public long modificationTime { get; set; }
         public string owner { get; set; }
         public string pathSuffix { get; set; }
@@ -118,51 +137,13 @@ namespace CloudFSVisualizer.Model
         public List<string> storageTypes { get; set; }
     }
 
-    public class Block2
-    {
-        public int blockId { get; set; }
-        public string blockPoolId { get; set; }
-        public int generationStamp { get; set; }
-        public int numBytes { get; set; }
-    }
-
-    public class BlockToken2
-    {
-        public string urlString { get; set; }
-    }
-
-    public class Location2
-    {
-        public string adminState { get; set; }
-        public object blockPoolUsed { get; set; }
-        public int cacheCapacity { get; set; }
-        public int cacheUsed { get; set; }
-        public object capacity { get; set; }
-        public object dfsUsed { get; set; }
-        public string hostName { get; set; }
-        public int infoPort { get; set; }
-        public int infoSecurePort { get; set; }
-        public string ipAddr { get; set; }
-        public int ipcPort { get; set; }
-        public int lastBlockReportMonotonic { get; set; }
-        public object lastBlockReportTime { get; set; }
-        public object lastUpdate { get; set; }
-        public int lastUpdateMonotonic { get; set; }
-        public string name { get; set; }
-        public string networkLocation { get; set; }
-        public object remaining { get; set; }
-        public string storageID { get; set; }
-        public int xceiverCount { get; set; }
-        public int xferPort { get; set; }
-    }
-
     public class LocatedBlock
     {
-        public Block2 block { get; set; }
-        public BlockToken2 blockToken { get; set; }
+        public Block block { get; set; }
+        public BlockToken blockToken { get; set; }
         public List<object> cachedLocations { get; set; }
         public bool isCorrupt { get; set; }
-        public List<Location2> locations { get; set; }
+        public List<Location> locations { get; set; }
         public object startOffset { get; set; }
         public List<string> storageTypes { get; set; }
     }
