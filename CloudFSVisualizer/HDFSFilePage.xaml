@@ -17,7 +17,7 @@
         <ListView
             x:Name="HDFSFileListView"
             Grid.Row="1"
-            ItemsSource="{x:Bind FileList}"
+            ItemsSource="{x:Bind FileList, Mode=OneWay}"
             IsItemClickEnabled="True"
             ItemClick="HDFSFileListView_ItemClickAsync">
             <ListView.ItemTemplate>
@@ -33,7 +33,7 @@
             ScrollViewer.HorizontalScrollMode="Enabled"                  
             ScrollViewer.VerticalScrollMode="Disabled">
             <ItemsControl 
-            ItemsSource="{x:Bind PresentList}">
+            ItemsSource="{x:Bind LocationDict, Mode=OneWay}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Background="Transparent" Orientation="Horizontal" />
