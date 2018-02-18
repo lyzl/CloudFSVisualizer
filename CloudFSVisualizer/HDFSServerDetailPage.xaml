@@ -6,37 +6,57 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model ="using:CloudFSVisualizer.Model"
+    xmlns:telerik="using:Telerik.UI.Xaml.Controls.Chart"
     mc:Ignorable="d">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <StackPanel 
+    <Page.Resources>
+        <local:PieLabelStrategy x:Key="Strategy">
+            <local:PieLabelStrategy.Binding>
+                <telerik:PropertyNameDataPointBinding PropertyName="Item1"/>
+            </local:PieLabelStrategy.Binding>
+        </local:PieLabelStrategy>
+    </Page.Resources>
+    <ScrollViewer>
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel 
                 Orientation="Vertical"
                 Grid.Column="1">
-                <Button
+                    <Button
                     x:Name="HDFSFilePageButton"
                     Grid.Column="1"
                     Click="HDFSFilePageButton_Click"
                     Content="file manage"
                     Margin="20"/>
-                <Button
+                    <Button
                     x:Name="HDFSConfigurationButton"
                     Grid.Column="1"
                     Click="HDFSConfigurationButton_Click"
                     Content="configuration"
                     Margin="20"/>
-            </StackPanel>
-            
-        </Grid>
-        <ScrollViewer
-            Grid.Row="1">
+                </StackPanel>
+
+            </Grid>
+            <telerik:RadPieChart
+                x:Name="CapacityPieChart"
+                PaletteName="DefaultDark"
+                Height="500"
+                HorizontalAlignment="Stretch"
+                Margin="50">
+                <telerik:PieSeries
+                    x:Name="CapacityPieChartSeries"
+                    ItemsSource="{Binding DiskCapacity}">
+                    <telerik:PieSeries.ValueBinding>
+                        <telerik:PropertyNameDataPointBinding PropertyName="Item2"/>
+                    </telerik:PieSeries.ValueBinding>
+                    <telerik:PieSeries.LabelDefinitions>
+                        <telerik:ChartSeriesLabelDefinition Margin="-15" Strategy="{StaticResource Strategy}"/>
+                    </telerik:PieSeries.LabelDefinitions>
+                </telerik:PieSeries>
+            </telerik:RadPieChart>
             <GridView
                 x:Name="ServerDetailListGridView"
                 ItemClick="ServerDetailListGridView_ItemClick"
@@ -65,7 +85,6 @@
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
             </GridView>
-        </ScrollViewer>
-    </Grid>
-    
+        </StackPanel>
+    </ScrollViewer>
 </Page>
