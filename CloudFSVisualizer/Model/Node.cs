@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,24 +17,41 @@ namespace CloudFSVisualizer.Model
         public Uri PrivateKey { get; set; }
     }
 
-    public class HadoopNode: Node
+    public abstract class HadoopNode: Node
     {
-        
+
     }
 
     public abstract class HDFSNode: HadoopNode
     {
-        
+        public abstract Task<NodeOperatingSystem> OperatingSystemInfo();
     }
+
 
     public class HDFSMasterNode : HDFSNode
     {
-
+        public override async Task<NodeOperatingSystem> OperatingSystemInfo()
+        {
+            string queryUrl = $@"http://{Host}:50070/jmx?qry=java.lang:type=OperatingSystem";
+            var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
+            JObject rootObject = JObject.Parse(json);
+            JToken infoToken = rootObject["beans"].Children().ToList().First();
+            var info = infoToken.ToObject<NodeOperatingSystem>();
+            return info;
+        }
     }
 
     public class HDFSSlaverNode : HDFSNode
     {
-
+        public override async Task<NodeOperatingSystem> OperatingSystemInfo()
+        {
+            string queryUrl = $@"http://{Host}:50075/jmx?qry=java.lang:type=OperatingSystem";
+            var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
+            JObject rootObject = JObject.Parse(json);
+            JToken infoToken = rootObject["beans"].Children().ToList().First();
+            var info = infoToken.ToObject<NodeOperatingSystem>();
+            return info;
+        }
     }
 
     public class NodeOperatingSystem
