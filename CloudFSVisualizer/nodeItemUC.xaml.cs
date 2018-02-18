@@ -23,7 +23,7 @@ using Windows.UI.Core;
 
 namespace CloudFSVisualizer
 {
-    public sealed partial class NodeItemUC : UserControl, INotifyPropertyChanged
+    public sealed partial class NodeItemUC : UserControl, INotifyPropertyChanged, IDisposable
     {
         public Node NodeItem { get { return this.DataContext as Node; } }
         private NodeStatus status;
@@ -53,12 +53,17 @@ namespace CloudFSVisualizer
             Status = NodeStatus.Unknown;
             QueryTimer = new Timer(async (e) =>
             {
+
                 _queryLock.WaitOne();
                 await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
+                    if (NodeItem == null)
+                    {
+                        QueryTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                        return;
+                    }
                     Status = await NodeManager.GetNodeConnectionStatus(NodeItem);
                 });
-                
                 _queryLock.Set();
             },
             _queryLock,
