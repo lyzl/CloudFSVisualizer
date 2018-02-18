@@ -12,15 +12,7 @@ namespace CloudFSVisualizer
 {
     public class HDFSFileManager
     {
-        public static async Task<FileStatus> GetFileStatus( HDFSFile file)
-        {
-            var address = $@"http://{file.ServerHost}:50070/webhdfs/v1/{file.Path}?op=GETFILESTATUS";
-            var json = await NetworkManager.FetchStringDataFromUri(new Uri(address));
-            JObject rootObject = JObject.Parse(json);
-            JToken statusToken = rootObject["FileStatus"];
-            var status = statusToken.ToObject<FileStatus>();
-            return status;
-        }
+
 
         public static async Task<List<HDFSFile>> ListDirectory(HDFSFile file)
         {
@@ -39,14 +31,5 @@ namespace CloudFSVisualizer
             return fileList;
         }
 
-        public static async Task<LocatedBlocks> GetBlockLocations(HDFSFile file)
-        {
-            var address = $@"http://{file.ServerHost}:50070/webhdfs/v1/{file.Path}?op=GET_BLOCK_LOCATIONS";
-            var json = await NetworkManager.FetchStringDataFromUri(new Uri(address));
-            JObject rootObject = JObject.Parse(json);
-            JToken statusToken = rootObject["LocatedBlocks"];
-            var status = statusToken.ToObject<LocatedBlocks>();
-            return status;
-        }
     }
 }
