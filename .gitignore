@@ -3,3 +3,4 @@
 *.json
 *.ide
 .vs/CloudFSVisualizer/v15/.suo
+CloudFSVisualizer/id_rsa_2048
