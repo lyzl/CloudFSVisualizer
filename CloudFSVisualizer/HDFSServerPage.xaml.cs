@@ -33,36 +33,41 @@ namespace CloudFSVisualizer
                 SType = Server.ServerType.HDFSServer,
                 MasterNode = new HDFSMasterNode
                 {
-                    Host = "172.18.84.45",
-                    Description = "master"
+                    Host = "h1.lingdra.com",
+                    Description = "master",
+                    PrivateKey= new Uri("ms-appx:///id_rsa_2048")
 
                 },
                 SlaveNode = new List<HDFSSlaverNode>()
                 {
                     new HDFSSlaverNode
                     {
-                        Host = "172.18.84.37",
-                        Description = "slave"
+                        Host = "h2.lingdra.com",
+                        Description = "slave",
+                        PrivateKey= new Uri("ms-appx:///id_rsa_2048")
                     },
                      new HDFSSlaverNode
                     {
-                        Host = "172.18.84.44",
-                        Description = "slave"
+                        Host = "h3.lingdra.com",
+                        Description = "slave",
+                        PrivateKey= new Uri("ms-appx:///id_rsa_2048")
+                    },
+                     new HDFSSlaverNode
+                    {
+                        Host = "h4.lingdra.com",
+                        Description = "slave",
+                        PrivateKey= new Uri("ms-appx:///id_rsa_2048")
                     }
                 }
             };
-            GetServer();
-            //ServerList.Add(hadoopServer);
+            //GetServer();
+            ServerList.Add(hadoopServer);
             //ServerManager.StoreHDFSServerListToFileAsync(ServerList);
             //var status = HDFSFileManager.GetFileStatus(new HDFSFile
             //{
             //    ServerHost = @"172.18.84.45:50070",
             //    Path = @"/user/hadoop/files/testFile/LICENSE"
             //});
-        }
-        public async void GetServer()
-        {
-            ServerList = await ServerManager.GetHDFSServerListFromFileAsync();
         }
 
         private void ServerListGridView_ItemClick(object sender, ItemClickEventArgs e)
