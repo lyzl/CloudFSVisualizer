@@ -41,7 +41,7 @@ namespace CloudFSVisualizer.Model
         }
     }
 
-    public class HDFSSlaverNode : HDFSNode
+    public class HDFSSlaveNode : HDFSNode
     {
         public override async Task<NodeOperatingSystem> OperatingSystemInfo()
         {

@@ -38,21 +38,21 @@ namespace CloudFSVisualizer
                     PrivateKey= new Uri("ms-appx:///id_rsa_2048")
 
                 },
-                SlaveNode = new List<HDFSSlaverNode>()
+                SlaveNode = new List<HDFSSlaveNode>()
                 {
-                    new HDFSSlaverNode
+                    new HDFSSlaveNode
                     {
                         Host = "h2.lingdra.com",
                         Description = "slave",
                         PrivateKey= new Uri("ms-appx:///id_rsa_2048")
                     },
-                     new HDFSSlaverNode
+                     new HDFSSlaveNode
                     {
                         Host = "h3.lingdra.com",
                         Description = "slave",
                         PrivateKey= new Uri("ms-appx:///id_rsa_2048")
                     },
-                     new HDFSSlaverNode
+                     new HDFSSlaveNode
                     {
                         Host = "h4.lingdra.com",
                         Description = "slave",

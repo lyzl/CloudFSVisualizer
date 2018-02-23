@@ -23,7 +23,7 @@ namespace CloudFSVisualizer
             {
                 port = "50070";
             }
-            else if (node is HDFSSlaverNode)
+            else if (node is HDFSSlaveNode)
             {
                 port = "50075";
             }

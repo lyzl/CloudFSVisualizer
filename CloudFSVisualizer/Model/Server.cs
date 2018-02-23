@@ -18,7 +18,7 @@ namespace CloudFSVisualizer.Model
     public class HDFSServer : Server
     {
         public HDFSMasterNode MasterNode { get; set; }
-        public List<HDFSSlaverNode> SlaveNode { get; set; }
+        public List<HDFSSlaveNode> SlaveNode { get; set; }
 
         public async Task<FSNamesystem> GetFSNamesystemAsync()
         {
