@@ -2,5 +2,5 @@
 /CloudFSVisualizer/obj
 *.json
 *.ide
-.vs/CloudFSVisualizer/v15/.suo
+.vs/
 CloudFSVisualizer/id_rsa_2048
