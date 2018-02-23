@@ -8,45 +8,72 @@
     xmlns:model="using:CloudFSVisualizer.Model"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <ListView
-            x:Name="HDFSFileListView"
-            Grid.Row="1"
-            ItemsSource="{x:Bind FileList, Mode=OneWay}"
-            IsItemClickEnabled="True"
-            ItemClick="HDFSFileListView_ItemClickAsync">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="model:HDFSFile">
-                    <TextBlock Text="{x:Bind Path}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <ScrollViewer
-            Grid.Row="2"
-            ScrollViewer.VerticalScrollBarVisibility="Disabled" 
-            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-            ScrollViewer.HorizontalScrollMode="Enabled"                  
-            ScrollViewer.VerticalScrollMode="Disabled">
-            <ItemsControl 
-            ItemsSource="{x:Bind LocationDict, Mode=OneWay}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Background="Transparent" Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Width="400">
-                            <local:BlockPresenterUC/>
-                        </StackPanel>
+    <ScrollViewer Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel>
+            <ListView
+                x:Name="HDFSFileListView"
+                Grid.Row="1"
+                ItemsSource="{x:Bind FileList, Mode=OneWay}"
+                IsItemClickEnabled="True"
+                ItemClick="HDFSFileListView_ItemClickAsync">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="model:HDFSFile">
+                        <TextBlock Text="{x:Bind Path}"/>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-    </Grid>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Grid>
+
+                <StackPanel 
+                    FlowDirection="LeftToRight"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBox x:Name="FilePathTextBox">
+
+                    </TextBox>
+                    <Button
+                        x:Name="GoToPathButton"
+                        Content="Go"
+                        Click="GoToPathButton_Click"/>
+                </StackPanel>
+                <StackPanel 
+                    FlowDirection="RightToLeft"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <Button
+                        x:Name="CreateDirectoryButton"
+                        Content="Create"
+                        Click="CreateDirectoryButton_Click"/>
+                    <Button
+                        x:Name="UploadFileButton"
+                        Content="Upload"
+                        Click="UploadFileButton_Click"/>
+                </StackPanel>
+
+            </Grid>
+            <local:BlockPresenterUC ItemsSource="{x:Bind BlockList, Mode=OneWay}"/>
+            <ScrollViewer
+                Grid.Row="2"
+                ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                ScrollViewer.HorizontalScrollMode="Enabled"                  
+                ScrollViewer.VerticalScrollMode="Disabled">
+                <ItemsControl 
+                    ItemsSource="{x:Bind LocatedBlockList, Mode=OneWay}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Background="Transparent" Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="model:ServerLocatedBlocks">
+                            <StackPanel Width="400">
+                                <local:BlockPresenterUC ItemsSource="{x:Bind LocatedBlockList}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </StackPanel>
+    </ScrollViewer>
 </Page>

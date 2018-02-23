@@ -5,22 +5,103 @@
     xmlns:local="using:CloudFSVisualizer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="using:CloudFSVisualizer.Model"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" x:Key="ToolTipTextBlockTitleStyle">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,5,5,0"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="ToolTipTextBlockValueStyle">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,5,5,0"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </UserControl.Resources>
     <GridView
+        x:Name="BlocksGridView"
         ScrollViewer.VerticalScrollBarVisibility="Auto"
         ScrollViewer.VerticalScrollMode="Enabled"
-        Height="500"
-        ItemsSource="{x:Bind LocationDict}"
-        Background="Red">
+        ItemsSource="{x:Bind ItemsSource}"
+        Background="LightGray"
+        >
         <GridView.ItemTemplate>
-            <DataTemplate>
-                <Rectangle
+            <DataTemplate x:DataType="model:LocatedBlock">
+                <Grid
+                    x:Name="BlockRectangle"
                     Height="50"
                     Width="50"
-                    Fill="LightCyan"/>
+                    Background="LightCyan"
+                    PointerEntered="BlockRectangle_PointerEntered">
+                    <ToolTipService.ToolTip>
+                        <ToolTip>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock 
+                                        Text="Block ID:"
+                                        Style="{StaticResource ToolTipTextBlockTitleStyle}"
+                                        Margin="0,0,5,0"/>
+                                    <TextBlock
+                                        Text="{x:Bind block.blockId}"
+                                        Style="{StaticResource ToolTipTextBlockValueStyle}"
+                                        Margin="0,0,5,0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        Text="Block Pool ID:"
+                                        Style="{StaticResource ToolTipTextBlockTitleStyle}"/>
+                                    <TextBlock 
+                                        Text="{x:Bind block.blockPoolId}" 
+                                        Style="{StaticResource ToolTipTextBlockValueStyle}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        Text="GenerationStamp:" 
+                                        Style="{StaticResource ToolTipTextBlockTitleStyle}"/>
+                                    <TextBlock
+                                        Text="{x:Bind block.generationStamp}" 
+                                        Style="{StaticResource ToolTipTextBlockValueStyle}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock 
+                                        Text="Bytes Number:" 
+                                        Style="{StaticResource ToolTipTextBlockTitleStyle}"/>
+                                    <TextBlock 
+                                        Text="{x:Bind block.generationStamp}" 
+                                        Style="{StaticResource ToolTipTextBlockValueStyle}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock 
+                                        Text="Is Corrupt:"
+                                        Style="{StaticResource ToolTipTextBlockTitleStyle}"/>
+                                    <TextBlock 
+                                        Text="{x:Bind isCorrupt}" 
+                                        Style="{StaticResource ToolTipTextBlockValueStyle}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock 
+                                        Text="Start Offset:" 
+                                        Style="{StaticResource ToolTipTextBlockTitleStyle}"/>
+                                    <TextBlock 
+                                        Text="{x:Bind startOffset}"
+                                        Style="{StaticResource ToolTipTextBlockValueStyle}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        Text="Storage Types:" 
+                                        Style="{StaticResource ToolTipTextBlockTitleStyle}"/>
+                                    <TextBlock
+                                        Text="{x:Bind storageTypes[0]}" 
+                                        Style="{StaticResource ToolTipTextBlockValueStyle}"/>
+                                </StackPanel>
+                            </StackPanel>
+                            
+                        </ToolTip>
+                    </ToolTipService.ToolTip>
+                </Grid>
             </DataTemplate>
         </GridView.ItemTemplate>
     </GridView>
