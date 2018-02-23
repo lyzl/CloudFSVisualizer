@@ -93,7 +93,7 @@ namespace CloudFSVisualizer.Model
         public int blockId { get; set; }
         public string blockPoolId { get; set; }
         public int generationStamp { get; set; }
-        public int numBytes { get; set; }
+        public long numBytes { get; set; }
     }
 
     public class BlockToken
@@ -155,6 +155,12 @@ namespace CloudFSVisualizer.Model
         public bool isUnderConstruction { get; set; }
         public LastLocatedBlock lastLocatedBlock { get; set; }
         public List<LocatedBlock> locatedBlocks { get; set; }
+    }
+
+    public class ServerLocatedBlocks
+    {
+        public string HostName { get; set; }
+        public List<LocatedBlock> LocatedBlockList { get; set; }
     }
     /*
     public class RootObject
