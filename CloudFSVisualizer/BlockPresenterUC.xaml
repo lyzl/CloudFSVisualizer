@@ -25,7 +25,7 @@
         x:Name="BlocksGridView"
         ScrollViewer.VerticalScrollBarVisibility="Auto"
         ScrollViewer.VerticalScrollMode="Enabled"
-        ItemsSource="{x:Bind ItemsSource}"
+        ItemsSource="{x:Bind ItemsSource, Mode=OneWay}"
         Background="LightGray"
         >
         <GridView.ItemTemplate>
@@ -35,7 +35,7 @@
                     Height="50"
                     Width="50"
                     Background="LightCyan"
-                    PointerEntered="BlockRectangle_PointerEntered">
+                    Tapped="BlockRectangle_Tapped">
                     <ToolTipService.ToolTip>
                         <ToolTip>
                             <StackPanel>
