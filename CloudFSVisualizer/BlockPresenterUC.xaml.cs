@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using CloudFSVisualizer.Model;
 using System.ComponentModel;
+using Windows.UI;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -21,16 +22,9 @@ namespace CloudFSVisualizer
 {
     public sealed partial class BlockPresenterUC : UserControl, INotifyPropertyChanged
     {
-        private LocatedBlock currentBlock;
-        public LocatedBlock CurrentBlock
-        {
-            get { return currentBlock; }
-            set
-            {
-                currentBlock = value;
-                OnPropertyChanged("CurrentBlock");
-            }
-        }
+        public static Brush DefaultColor = new SolidColorBrush(Colors.LightGray);
+        public static Brush HighlightColor = new SolidColorBrush(Colors.LightBlue);
+
         private List<LocatedBlock> itemsSource;
         public List<LocatedBlock> ItemsSource
         {
@@ -38,32 +32,41 @@ namespace CloudFSVisualizer
             set
             {
                 itemsSource = value;
-                OnPropertyChanged("BlockList");
+                OnPropertyChanged("ItemsSource");
             }
         }
-        private LocatedBlock selectedBlock;
-        public LocatedBlock SelectedBlock
+        private LocatedBlock highlightBlock;
+        public LocatedBlock HighlightBlock
         {
-            get { return selectedBlock; }
+            get { return highlightBlock; }
             set
             {
-                selectedBlock = value;
-
+                highlightBlock = value;
+                OnPropertyChanged("HighlightBlock");
             }
         }
 
+        private Grid LastSelectedGrid { get; set; }
 
-        public HDFSSlaveNode Nodes { get; set; }
         public static readonly DependencyProperty ItemsSourceProperty =
-               DependencyProperty.Register(
-                     "ItemsSource",
-                      typeof(ServerLocatedBlocks),
-                      typeof(BlockPresenterUC),
-                      new PropertyMetadata(
-                          null,
-                          new PropertyChangedCallback(ItemSource_PropertyChanged)
-                          ));
+            DependencyProperty.Register(
+                "ItemsSource",
+                typeof(LocatedBlock),
+                typeof(BlockPresenterUC),
+                new PropertyMetadata(
+                    null,
+                    new PropertyChangedCallback(ItemSource_PropertyChanged)
+                    ));
 
+        public static readonly DependencyProperty HighlightProperty =
+            DependencyProperty.Register(
+                "HighlightBlock",
+                typeof(LocatedBlock),
+                typeof(BlockPresenterUC),
+                new PropertyMetadata(
+                    null,
+                    new PropertyChangedCallback(ItemSource_PropertyChanged)
+                    ));
         private static void ItemSource_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = d as BlockPresenterUC;
@@ -72,7 +75,6 @@ namespace CloudFSVisualizer
             {
                 control.OnPropertyChanged("BlockList");
             }
-                //control.OnItemsSourceChanged((IEnumerable)e.OldValue, (IEnumerable)e.NewValue);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -86,21 +88,25 @@ namespace CloudFSVisualizer
         public BlockPresenterUC()
         {
             this.InitializeComponent();
-            CurrentBlock = new LocatedBlock();
-            SelectedBlock = new LocatedBlock();
+            HighlightBlock = new LocatedBlock();
+            LastSelectedGrid = new Grid();
         }
 
-        private void BlocksGridView_ItemClick(object sender, ItemClickEventArgs e)
+        private int SearchIndexOfBlock(LocatedBlock item)
         {
-            var item = e.ClickedItem as LocatedBlock;
+            return ItemsSource.FindIndex(p => p.block.blockId == item.block.blockId);
         }
 
-        private void BlockRectangle_PointerEntered(object sender, PointerRoutedEventArgs e)
+        private void BlockRectangle_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var item = sender as Grid;
-            var dataObject = item.DataContext as LocatedBlock;
-            currentBlock = dataObject;
-            //CurrentBlock = item;
+            if (sender is Grid s)
+            {
+                s.Background = HighlightColor;
+                LastSelectedGrid.Background = DefaultColor;
+                LastSelectedGrid = s;
+                HighlightBlock = s.DataContext as LocatedBlock;
+            }
+
         }
     }
 }

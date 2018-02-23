@@ -23,7 +23,6 @@
                 </ListView.ItemTemplate>
             </ListView>
             <Grid>
-
                 <StackPanel 
                     FlowDirection="LeftToRight"
                     HorizontalAlignment="Left"
@@ -51,7 +50,10 @@
                 </StackPanel>
 
             </Grid>
-            <local:BlockPresenterUC ItemsSource="{x:Bind BlockList, Mode=OneWay}"/>
+            <TextBlock Text="{x:Bind BlockList.Count, Mode=OneWay}"/>
+            <local:BlockPresenterUC
+                x:Name="FileTotalBlocksPresenter"
+                ItemsSource="{x:Bind BlockList, Mode=OneWay}"/>
             <ScrollViewer
                 Grid.Row="2"
                 ScrollViewer.VerticalScrollBarVisibility="Disabled" 
@@ -68,6 +70,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="model:ServerLocatedBlocks">
                             <StackPanel Width="400">
+                                <TextBlock Text="{x:Bind HostName}"/>
                                 <local:BlockPresenterUC ItemsSource="{x:Bind LocatedBlockList}"/>
                             </StackPanel>
                         </DataTemplate>
