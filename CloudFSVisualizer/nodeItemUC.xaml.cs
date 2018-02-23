@@ -23,7 +23,7 @@ using Windows.UI.Core;
 
 namespace CloudFSVisualizer
 {
-    public sealed partial class NodeItemUC : UserControl, INotifyPropertyChanged, IDisposable
+    public sealed partial class NodeItemUC : UserControl, INotifyPropertyChanged
     {
         public Node NodeItem { get { return this.DataContext as Node; } }
         private NodeStatus status;
