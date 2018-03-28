@@ -42,43 +42,35 @@ namespace CloudFSVisualizer
             }
         }
 
-        public static SshClient CreateSSHClinetToNode(Node node)
+        public static SshClient CreateSSHClient(string host, string user, string pswd, string keyFile)
         {
-            var SSHHost = node.Host;
-            var SSHUser = node.User;
-            var SSHPswd = node.Pswd;
-            var auth = new PasswordAuthenticationMethod(SSHUser, SSHPswd);
-            var info = new ConnectionInfo(SSHHost, SSHUser, auth);
-            return new SshClient(info);
+            var connectionInfo = _PrepareConnection(host, user, pswd, keyFile);
+            return new SshClient(connectionInfo);
         }
 
-        public static async void UploadFileToNode(StorageFile storageFile, Node node, string remotePath)
+        public static SftpClient CreateSFtpChannel(string host, string user, string pswd, string keyFile)
         {
-            var SSHHost = node.Host;
-            var SSHUser = node.User;
-            var SSHPswd = node.Pswd;
-            var auth = new PasswordAuthenticationMethod(SSHUser, SSHPswd);
-            var info = new ConnectionInfo(SSHHost, SSHUser, auth);
-            using (var client = new SftpClient(info))
-            using (var fileStream = await storageFile.OpenStreamForReadAsync())
-            {
-
-                client.UploadFile(fileStream, remotePath);
-            }
+            var connectionInfo = _PrepareConnection(host, user, pswd, keyFile);
+            return new SftpClient(connectionInfo);
         }
 
-        public static async void DownloadFileFromNode(StorageFile storageFile, Node node, string remotePath)
+        private static ConnectionInfo _PrepareConnection(string host, string user, string pswd, string keyFile)
         {
-            var SSHHost = node.Host;
-            var SSHUser = node.User;
-            var SSHPswd = node.Pswd;
-            var auth = new PasswordAuthenticationMethod(SSHUser, SSHPswd);
-            var info = new ConnectionInfo(SSHHost, SSHUser, auth);
-            using (var client = new SftpClient(info))
-            using (var fileStream = await storageFile.OpenStreamForWriteAsync())
+            var auth = new PasswordAuthenticationMethod(user, pswd);
+            var info = new ConnectionInfo(host, user, auth);
+            PrivateKeyFile key = new PrivateKeyFile(keyFile);
+            var keyFiles = new[] { key };
+            var methods = new List<AuthenticationMethod>();
+            if (user != null && pswd != null)
             {
-                client.DownloadFile(remotePath, fileStream);
+                methods.Add(new PasswordAuthenticationMethod(user, pswd));
             }
+            if (user != null && pswd != null)
+            {
+                methods.Add(new PrivateKeyAuthenticationMethod(user, keyFiles));
+            }
+            var connectionInfo = new ConnectionInfo(host, user, methods.ToArray());
+            return connectionInfo;
         }
     }
 }
