@@ -105,25 +105,25 @@ namespace CloudFSVisualizer.Model
     {
         public string adminState { get; set; }
         public object blockPoolUsed { get; set; }
-        public int cacheCapacity { get; set; }
-        public int cacheUsed { get; set; }
+        public long cacheCapacity { get; set; }
+        public long cacheUsed { get; set; }
         public object capacity { get; set; }
         public object dfsUsed { get; set; }
         public string hostName { get; set; }
-        public int infoPort { get; set; }
-        public int infoSecurePort { get; set; }
+        public long infoPort { get; set; }
+        public long infoSecurePort { get; set; }
         public string ipAddr { get; set; }
-        public int ipcPort { get; set; }
-        public int lastBlockReportMonotonic { get; set; }
+        public long ipcPort { get; set; }
+        public long lastBlockReportMonotonic { get; set; }
         public object lastBlockReportTime { get; set; }
         public object lastUpdate { get; set; }
-        public int lastUpdateMonotonic { get; set; }
+        public long lastUpdateMonotonic { get; set; }
         public string name { get; set; }
         public string networkLocation { get; set; }
         public object remaining { get; set; }
         public string storageID { get; set; }
-        public int xceiverCount { get; set; }
-        public int xferPort { get; set; }
+        public long xceiverCount { get; set; }
+        public long xferPort { get; set; }
     }
 
     public class LastLocatedBlock
@@ -160,6 +160,7 @@ namespace CloudFSVisualizer.Model
     public class ServerLocatedBlocks
     {
         public string HostName { get; set; }
+        public LocatedBlock PresentBlock { get; set; }
         public List<LocatedBlock> LocatedBlockList { get; set; }
     }
     /*
