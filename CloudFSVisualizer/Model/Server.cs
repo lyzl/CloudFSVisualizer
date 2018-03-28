@@ -29,6 +29,15 @@ namespace CloudFSVisualizer.Model
             var info = infoToken.ToObject<FSNamesystem>();
             return info;
         }
+        public async Task<NameNodeInfo> GetNameNodeInfoAsync()
+        {
+            string queryUrl = $@"http://{MasterNode.Host}:50070/jmx?qry=Hadoop:service=NameNode,name=NameNodeInfo";
+            var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
+            JObject rootObject = JObject.Parse(json);
+            JToken infoToken = rootObject["beans"].Children().ToList().First();
+            var info = infoToken.ToObject<NameNodeInfo>();
+            return info;
+        }
     }
 
 
@@ -95,5 +104,53 @@ namespace CloudFSVisualizer.Model
         public int NumEnteringMaintenanceDataNodes { get; set; }
     }
 
+    public class DistinctVersion
+    {
+        public string key { get; set; }
+        public int value { get; set; }
+    }
 
+    public class NameNodeInfo
+    {
+        public string name { get; set; }
+        public string modelerType { get; set; }
+        public long Total { get; set; }
+        public bool UpgradeFinalized { get; set; }
+        public string ClusterId { get; set; }
+        public string Version { get; set; }
+        public long Used { get; set; }
+        public long Free { get; set; }
+        public string Safemode { get; set; }
+        public long NonDfsUsedSpace { get; set; }
+        public double PercentUsed { get; set; }
+        public long BlockPoolUsedSpace { get; set; }
+        public double PercentBlockPoolUsed { get; set; }
+        public double PercentRemaining { get; set; }
+        public int CacheCapacity { get; set; }
+        public int CacheUsed { get; set; }
+        public int TotalBlocks { get; set; }
+        public int TotalFiles { get; set; }
+        public int NumberOfMissingBlocks { get; set; }
+        public int NumberOfMissingBlocksWithReplicationFactorOne { get; set; }
+        public string LiveNodes { get; set; }
+        public string DeadNodes { get; set; }
+        public string DecomNodes { get; set; }
+        public string EnteringMaintenanceNodes { get; set; }
+        public string BlockPoolId { get; set; }
+        public string NameDirStatuses { get; set; }
+        public string NodeUsage { get; set; }
+        public string NameJournalStatus { get; set; }
+        public string JournalTransactionInfo { get; set; }
+        public string NNStarted { get; set; }
+        public long NNStartedTimeInMillis { get; set; }
+        public string CompileInfo { get; set; }
+        public string CorruptFiles { get; set; }
+        public int NumberOfSnapshottableDirs { get; set; }
+        public int DistinctVersionCount { get; set; }
+        public List<DistinctVersion> DistinctVersions { get; set; }
+        public string SoftwareVersion { get; set; }
+        public string NameDirSize { get; set; }
+        public object RollingUpgradeStatus { get; set; }
+        public int Threads { get; set; }
+    }
 }
