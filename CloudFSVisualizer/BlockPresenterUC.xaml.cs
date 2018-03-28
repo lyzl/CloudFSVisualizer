@@ -48,6 +48,7 @@ namespace CloudFSVisualizer
 
         private Grid LastSelectedGrid { get; set; }
 
+        public event RoutedEventHandler BlockTapped;
         public static readonly DependencyProperty ItemsSourceProperty =
             DependencyProperty.Register(
                 "ItemsSource",
@@ -64,14 +65,21 @@ namespace CloudFSVisualizer
                 typeof(LocatedBlock),
                 typeof(BlockPresenterUC),
                 new PropertyMetadata(
-                    null,
-                    new PropertyChangedCallback(ItemSource_PropertyChanged)
+                    new LocatedBlock(),
+                    new PropertyChangedCallback(Highlight_PropertyChanged)
                     ));
+
+        private static void Highlight_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is BlockPresenterUC control)
+            {
+                (d as BlockPresenterUC).HighlightBlock = e.NewValue as LocatedBlock;
+            }
+        }
+
         private static void ItemSource_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var control = d as BlockPresenterUC;
-
-            if (control != null)
+            if (d is BlockPresenterUC control)
             {
                 control.OnPropertyChanged("BlockList");
             }
@@ -105,8 +113,8 @@ namespace CloudFSVisualizer
                 LastSelectedGrid.Background = DefaultColor;
                 LastSelectedGrid = s;
                 HighlightBlock = s.DataContext as LocatedBlock;
+                BlockTapped?.Invoke(sender, e);
             }
-
         }
     }
 }
