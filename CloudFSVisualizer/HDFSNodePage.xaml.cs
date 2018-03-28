@@ -50,13 +50,10 @@ namespace CloudFSVisualizer
             {
                 SysInfoList.Add(new NodeOperatingSystem());
             }
-            //(MemoryLineChart.Series[0] as LineSeries).DependentRangeAxis = new LineSeriesAxis();
             QueryTimer = new Timer(async (e) =>
             {
-                //Debug.WriteLine("called");
                 _queryLock.WaitOne();
                 _queryLock.Reset();
-
                 await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
                     var value = await CurrentNode.OperatingSystemInfo();
@@ -81,21 +78,9 @@ namespace CloudFSVisualizer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        private async void NodeConfigurationButton_Click(object sender, RoutedEventArgs e)
+        private void NodeConfigurationButton_Click(object sender, RoutedEventArgs e)
         {
-            //Frame.Navigate(typeof(NodeConfigurationPage), CurrentNode);
-
-            var template = await CurrentNode.OperatingSystemInfo();
-            SysInfoList.Add(template);
-            //testCollection.Add(new TestClass() { value = 15 });
-            //((LineSeries)this.MemoryLineChart.Series[0]).ItemsSource = SysInfoList;
-            //for (int i = 0; i < SysInfoList.Count; i++)
-            //{
-            //    SysInfoList[i] = template;
-            //    SysInfoList[i].FreePhysicalMemorySize = i;
-            //}
-
-            //((LineSeries)this.MemoryLineChart.Series[0]).ItemsSource = SysInfoList;
+            Frame.Navigate(typeof(HDFSConfigurationPage), CurrentNode);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
