@@ -12,13 +12,6 @@
         x:Name="AppShellNavigationView"
         SelectionChanged="AppShellNavigationView_SelectionChanged"
         MenuItemsSource="{x:Bind Pages}">
-        <NavigationView.MenuItems>
-            <DataTemplate x:DataType="model:NavigationPage">
-                <NavigationViewItem 
-                    Icon="{x:Bind Icon}"
-                    Content="{x:Bind Desc}"/>
-            </DataTemplate>
-        </NavigationView.MenuItems>
         <Frame
             x:Name="AppContentFrame">
             

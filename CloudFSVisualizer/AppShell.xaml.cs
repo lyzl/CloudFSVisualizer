@@ -24,16 +24,15 @@ namespace CloudFSVisualizer.Assets
     /// </summary>
     public sealed partial class AppShell : Page
     {
-        List<NavigationPage> Pages { get; set; }
+        List<NavigationViewItem> Pages { get; set; }
         public AppShell()
         {
             this.InitializeComponent();
-            Pages = new List<NavigationPage>()
+            Pages = new List<NavigationViewItem>()
             {
-                new NavigationPage(new SymbolIcon(Symbol.Accept),"HDFS Servers",typeof(HDFSServerPage)),
-                new NavigationPage(new SymbolIcon(Symbol.Accept),"Yarn Servers",typeof(YarnServerPage))
+                new NavigationViewItem{Content = "HDFS Servers", Tag = typeof(HDFSServerPage), Icon = new FontIcon{ Glyph = "\xE130"} },
+                new NavigationViewItem{Content = "Yarn Servers", Tag = typeof(YarnServerPage), Icon = new FontIcon{ Glyph = "\xE130"} }
             };
-            Bindings.Update();
             AppContentFrame.Navigated += AppContentFrame_Navigated;
             SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
@@ -54,9 +53,9 @@ namespace CloudFSVisualizer.Assets
         private void AppContentFrame_Navigated(object sender, NavigationEventArgs e)
         {
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
-        ((Frame)sender).CanGoBack ?
-        AppViewBackButtonVisibility.Visible :
-        AppViewBackButtonVisibility.Collapsed;
+                ((Frame)sender).CanGoBack ?
+                AppViewBackButtonVisibility.Visible :
+                AppViewBackButtonVisibility.Collapsed;
         }
 
         private void AppShellNavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -67,9 +66,9 @@ namespace CloudFSVisualizer.Assets
             }
             else
             {
-                var selectedItem = args.SelectedItem as NavigationPage;
-                AppContentFrame.Navigate(selectedItem.Dest);
-                AppShellNavigationView.Header = selectedItem.Desc;
+                var selectedItem = args.SelectedItem as NavigationViewItem;
+                AppContentFrame.Navigate(selectedItem.Tag as Type);
+                AppShellNavigationView.Header = selectedItem.Content;
             }
         }
     }
