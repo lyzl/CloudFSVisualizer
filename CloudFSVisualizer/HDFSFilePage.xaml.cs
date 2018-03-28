@@ -23,14 +23,32 @@ using Windows.UI.Core;
 
 namespace CloudFSVisualizer
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
+    public class PresentData
+    {
+        public HDFSFile OriginFile;
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public long Length { get; set; }
+        public long ModificationTime { get; set; }
+        public string Owner { get; set; }
+
+        public async Task InitAsync(HDFSFile file)
+        {
+            OriginFile = file;
+            var status = await file.Status;
+            this.Type = status.type;
+            this.Length = status.length;
+            this.ModificationTime = status.modificationTime;
+            this.Owner = status.owner;
+            this.Name = file.Path.Split('/').Last();
+        }
+
+    }
+
     public sealed partial class HDFSFilePage : Page, INotifyPropertyChanged
     {
         public HDFSServer CurrentServer { get; set; }
         private List<ServerLocatedBlocks> locatedBlockList;
-
         public List<ServerLocatedBlocks> LocatedBlockList
         {
             get { return locatedBlockList; }
@@ -61,6 +79,26 @@ namespace CloudFSVisualizer
                 OnpropertyChanged("FileList");
             }
         }
+        private List<PresentData> presentList;
+        public List<PresentData> PresentList
+        {
+            get { return presentList; }
+            set
+            {
+                presentList = value;
+                OnpropertyChanged("PresentList");
+            }
+        }
+        private LocatedBlock currentBlock;
+        public LocatedBlock CurrentBlock
+        {
+            get { return currentBlock; }
+            set
+            {
+                currentBlock = value;
+                OnpropertyChanged("CurrentBlock");
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -70,6 +108,7 @@ namespace CloudFSVisualizer
             BlockList = new List<LocatedBlock>();
             locatedBlockList = new List<ServerLocatedBlocks>();
             FileList = new List<HDFSFile>();
+            presentList = new List<PresentData>();
         }
 
         void OnpropertyChanged(string name)
@@ -79,12 +118,20 @@ namespace CloudFSVisualizer
 
         public async void GetRootFolderAsync()
         {
-            var file = new HDFSFile()
+            var rootFolder = new HDFSFile()
             {
                 ServerHost = CurrentServer.MasterNode.Host,
-                Path = "/"
+                Path = ""
             };
-            FileList = await file.SubFile;
+            FileList = await rootFolder.SubFile;
+            var pList = new List<PresentData>();
+            foreach (var file in FileList)
+            {
+                var presentFile = new PresentData();
+                await presentFile.InitAsync(file);
+                pList.Add(presentFile);
+            }
+            PresentList = pList;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -95,15 +142,51 @@ namespace CloudFSVisualizer
             GetRootFolderAsync();
         }
 
-        private async void HDFSFileListView_ItemClickAsync(object sender, ItemClickEventArgs e)
+        private void GoToPathButton_Click(object sender, RoutedEventArgs e)
         {
-            var list = new List<ServerLocatedBlocks>();
-            //var dict = new Dictionary<string, List<LocatedBlock>>();
-            var item = e.ClickedItem as HDFSFile;
 
-            if ((await item.Status).type == "FILE")
+        }
+
+        private void CreateDirectoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentBlock = new LocatedBlock();
+        }
+
+        private void UploadFileButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BlockPresenter_BlockTapped(object sender, RoutedEventArgs e)
+        {
+            if (sender is Grid s)
             {
-                BlockList = (await item.GetBlocksAsync()).locatedBlocks;
+                CurrentBlock = s.DataContext as LocatedBlock;
+                foreach (var item in LocatedBlockList)
+                {
+                    item.PresentBlock = CurrentBlock;
+                }
+                OnpropertyChanged("CurrentBlock");
+            }
+        }
+
+        private void HDFSFileGridView_CurrentItemChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void HDFSFileGridView_SelectionChangedAsync(object sender, Telerik.UI.Xaml.Controls.Grid.DataGridSelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count() == 0)
+            {
+                return;
+            }
+            var list = new List<ServerLocatedBlocks>();
+            var item = e.AddedItems.First() as PresentData;
+            var fileItem = item.OriginFile; 
+            if ((await fileItem.Status).type == "FILE")
+            {
+                BlockList = (await fileItem.GetBlocksAsync()).locatedBlocks;
                 foreach (var block in BlockList)
                 {
                     foreach (var location in block.locations)
@@ -127,23 +210,16 @@ namespace CloudFSVisualizer
             }
             else
             {
-                FileList = await item.SubFile;
+                FileList = await fileItem.SubFile;
+                var pList = new List<PresentData>();
+                foreach (var file in FileList)
+                {
+                    var presentFile = new PresentData();
+                    await presentFile.InitAsync(file);
+                    pList.Add(presentFile);
+                }
+                PresentList = pList;
             }
-        }
-
-        private void GoToPathButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void CreateDirectoryButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void UploadFileButton_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

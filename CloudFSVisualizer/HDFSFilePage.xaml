@@ -6,22 +6,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="using:CloudFSVisualizer.Model"
+    xmlns:telerikGrid="using:Telerik.UI.Xaml.Controls.Grid"
     mc:Ignorable="d">
 
     <ScrollViewer Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel>
-            <ListView
-                x:Name="HDFSFileListView"
-                Grid.Row="1"
-                ItemsSource="{x:Bind FileList, Mode=OneWay}"
-                IsItemClickEnabled="True"
-                ItemClick="HDFSFileListView_ItemClickAsync">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="model:HDFSFile">
-                        <TextBlock Text="{x:Bind Path}"/>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
             <Grid>
                 <StackPanel 
                     FlowDirection="LeftToRight"
@@ -50,9 +39,17 @@
                 </StackPanel>
 
             </Grid>
+            <telerikGrid:RadDataGrid
+                ItemsSource="{x:Bind PresentList, Mode=OneWay}"
+                x:Name="HDFSFileGridView"
+                SelectionChanged="HDFSFileGridView_SelectionChangedAsync"
+                SelectionMode="Single">
+            </telerikGrid:RadDataGrid>
             <TextBlock Text="{x:Bind BlockList.Count, Mode=OneWay}"/>
             <local:BlockPresenterUC
-                x:Name="FileTotalBlocksPresenter"
+                x:Name="TotalBlocksPresenter"
+                BlockTapped="BlockPresenter_BlockTapped"
+                HighlightBlock="{x:Bind CurrentBlock, Mode=OneWay}"
                 ItemsSource="{x:Bind BlockList, Mode=OneWay}"/>
             <ScrollViewer
                 Grid.Row="2"
@@ -71,7 +68,11 @@
                         <DataTemplate x:DataType="model:ServerLocatedBlocks">
                             <StackPanel Width="400">
                                 <TextBlock Text="{x:Bind HostName}"/>
-                                <local:BlockPresenterUC ItemsSource="{x:Bind LocatedBlockList}"/>
+                                <local:BlockPresenterUC
+                                    x:Name="DistributedBlocksPresenter" 
+                                    BlockTapped="BlockPresenter_BlockTapped"
+                                    HighlightBlock="{x:Bind PresentBlock, Mode=OneWay}"
+                                    ItemsSource="{x:Bind LocatedBlockList}"/>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
