@@ -13,6 +13,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using CloudFSVisualizer.Model;
+using Windows.Storage;
+using Windows.UI.Core;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -34,8 +37,12 @@ namespace CloudFSVisualizer
                 MasterNode = new HDFSMasterNode
                 {
                     Host = "h1.lingdra.com",
+                    User = "root",
+                    Pswd = "123",
                     Description = "master",
-                    PrivateKey= new Uri("ms-appx:///id_rsa_2048")
+                    HadoopHomeDirectory = "/usr/local/hadoop/",
+                    PrivateKey = ApplicationData.Current.LocalFolder.Path + "/id_rsa_2048",
+                    
 
                 },
                 SlaveNode = new List<HDFSSlaveNode>()
@@ -44,30 +51,26 @@ namespace CloudFSVisualizer
                     {
                         Host = "h2.lingdra.com",
                         Description = "slave",
-                        PrivateKey= new Uri("ms-appx:///id_rsa_2048")
+                        PrivateKey= ApplicationData.Current.LocalFolder.Path + "/id_rsa_2048"
                     },
                      new HDFSSlaveNode
                     {
                         Host = "h3.lingdra.com",
                         Description = "slave",
-                        PrivateKey= new Uri("ms-appx:///id_rsa_2048")
+                        PrivateKey= ApplicationData.Current.LocalFolder.Path + "/id_rsa_2048"
                     },
                      new HDFSSlaveNode
                     {
                         Host = "h4.lingdra.com",
                         Description = "slave",
-                        PrivateKey= new Uri("ms-appx:///id_rsa_2048")
+                        PrivateKey= ApplicationData.Current.LocalFolder.Path + "/id_rsa_2048"
                     }
                 }
             };
             //GetServer();
             ServerList.Add(hadoopServer);
             //ServerManager.StoreHDFSServerListToFileAsync(ServerList);
-            //var status = HDFSFileManager.GetFileStatus(new HDFSFile
-            //{
-            //    ServerHost = @"172.18.84.45:50070",
-            //    Path = @"/user/hadoop/files/testFile/LICENSE"
-            //});
+            
         }
 
         private void ServerListGridView_ItemClick(object sender, ItemClickEventArgs e)
