@@ -17,7 +17,7 @@
         <StackPanel>
             <Grid>
                 <Button
-                    Content="restart"
+                    Content="Configuration"
                     x:Name="NodeConfigurationButton"
                     Click="NodeConfigurationButton_Click">
                 </Button>
