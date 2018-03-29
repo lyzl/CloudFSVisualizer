@@ -12,7 +12,7 @@
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.16299.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -101,6 +101,9 @@
     <Compile Include="BlockPresenterUC.xaml.cs">
       <DependentUpon>BlockPresenterUC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HDFSConfigurationPage.xaml.cs">
+      <DependentUpon>HDFSConfigurationPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HDFSFileManager.cs" />
     <Compile Include="HDFSFilePage.xaml.cs">
       <DependentUpon>HDFSFilePage.xaml</DependentUpon>
@@ -114,8 +117,8 @@
     <Compile Include="HDFSServerPage.xaml.cs">
       <DependentUpon>HDFSServerPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\Authentication.cs" />
     <Compile Include="Model\HDFSFile.cs" />
-    <Compile Include="Model\NavigationPage.cs" />
     <Compile Include="Model\Node.cs" />
     <Compile Include="NetworkManager.cs" />
     <Compile Include="NodeConfigurationPage.xaml.cs">
@@ -185,6 +188,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BlockPresenterUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HDFSConfigurationPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
