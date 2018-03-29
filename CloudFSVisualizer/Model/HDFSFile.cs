@@ -22,7 +22,7 @@ namespace CloudFSVisualizer.Model
             {
                 subFile = new AsyncLazy<List<HDFSFile>>(async () =>
                 {
-                    return await HDFSFileManager.ListDirectory(this);
+                    return await ListDirectory();
                 });
                 return subFile;
             }
@@ -69,8 +69,25 @@ namespace CloudFSVisualizer.Model
             return status;
         }
 
+        public async Task<List<HDFSFile>> ListDirectory()
+        {
+            var address = $@"http://{ServerHost}:50070/webhdfs/v1/{Path}?op=LISTSTATUS";
+            var json = await NetworkManager.FetchStringDataFromUri(new Uri(address));
+            JObject rootObject = JObject.Parse(json);
+            IList<JToken> statusTokens = rootObject["FileStatuses"]["FileStatus"].Children().ToList();
+            List<FileStatus> statusList = new List<FileStatus>();
+            List<HDFSFile> fileList = new List<HDFSFile>();
+            foreach (var token in statusTokens)
+            {
+                var result = token.ToObject<FileStatus>();
+                fileList.Add(new HDFSFile(this, result.pathSuffix));
+            }
+            return fileList;
+        }
+
 
     }
+
     public class FileStatus
     {
         public long accessTime { get; set; }
@@ -163,12 +180,6 @@ namespace CloudFSVisualizer.Model
         public LocatedBlock PresentBlock { get; set; }
         public List<LocatedBlock> LocatedBlockList { get; set; }
     }
-    /*
-    public class RootObject
-    {
-        public LocatedBlocks LocatedBlocks { get; set; }
-    }
-    */
 
     public sealed class AsyncLazy<T>
     {

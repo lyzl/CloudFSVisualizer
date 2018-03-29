@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using CloudFSVisualizer.Model;
@@ -12,24 +13,18 @@ namespace CloudFSVisualizer
 {
     public class HDFSFileManager
     {
-
-
-        public static async Task<List<HDFSFile>> ListDirectory(HDFSFile file)
+        public static async Task CreateHDFSFile(HDFSServer server, string filePath, Authentication auth)
         {
-            var address = $@"http://{file.ServerHost}:50070/webhdfs/v1/{file.Path}?op=LISTSTATUS";
-            var json = await NetworkManager.FetchStringDataFromUri(new Uri(address));
-            JObject rootObject = JObject.Parse(json);
-            IList<JToken> statusTokens = rootObject["FileStatuses"]["FileStatus"].Children().ToList();
-            List<FileStatus> statusList = new List<FileStatus>();
-            List<HDFSFile> fileList = new List<HDFSFile>();
-            foreach (var token in statusTokens)
+            
+            string url = $@"http://{server.MasterNode.Host}:50070/webhdfs/v1/{filePath}?user.name={auth.User}&op=CREATE";
+            using (var client = new HttpClient())
             {
-                var result = token.ToObject<FileStatus>();
-                fileList.Add(new HDFSFile(file, result.pathSuffix));
+                var response = await client.PutAsync(url, null);
+                var responseHeader = response.Headers;
             }
-
-            return fileList;
+            
         }
 
     }
+
 }
