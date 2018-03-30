@@ -16,30 +16,31 @@ namespace CloudFSVisualizer
     {
         public static async Task<Stream> FetchStreamDataFromUri(Uri uri)
         {
-            var http = new HttpClient();
-            var response = await http.GetAsync(uri);
-            if (response.IsSuccessStatusCode == true)
+            Stream responseStream = null;
+            using (var http = new HttpClient())
             {
-                return await response.Content.ReadAsStreamAsync();
+                var response = await http.GetAsync(uri);
+                if (response.IsSuccessStatusCode == true)
+                {
+                    responseStream = await response.Content.ReadAsStreamAsync();
+                }
             }
-            else
-            {
-                return null;
-            }
+            return responseStream;
+
         }
 
         public static async Task<string> FetchStringDataFromUri(Uri uri)
         {
-            var http = new HttpClient();
-            var response = await http.GetAsync(uri);
-            if (response.IsSuccessStatusCode == true)
+            string responseString = null;
+            using (var http = new HttpClient())
             {
-                return await response.Content.ReadAsStringAsync();
+                var response = await http.GetAsync(uri);
+                if (response.IsSuccessStatusCode == true)
+                {
+                    responseString =  await response.Content.ReadAsStringAsync();
+                }
             }
-            else
-            {
-                return null;
-            }
+            return responseString;
         }
 
         public static SshClient CreateSSHClient(string host, string user, string pswd, string keyFile)
