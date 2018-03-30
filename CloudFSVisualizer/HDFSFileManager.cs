@@ -17,8 +17,14 @@ namespace CloudFSVisualizer
         {
             
             string url = $@"http://{server.MasterNode.Host}:50070/webhdfs/v1/{filePath}?user.name={auth.User}&op=CREATE";
-            using (var client = new HttpClient())
+            var handler = new HttpClientHandler()
             {
+                AllowAutoRedirect = false
+            };
+
+            using (var client = new HttpClient(handler))
+            {
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, url);
                 var response = await client.PutAsync(url, null);
                 var responseHeader = response.Headers;
             }
