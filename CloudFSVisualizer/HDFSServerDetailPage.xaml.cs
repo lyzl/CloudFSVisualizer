@@ -66,29 +66,7 @@ namespace CloudFSVisualizer
             }
         }
 
-        //public List<double> DiskCapacity
-        //{
-        //    get
-        //    {
-        //        if (fsInfo == null)
-        //        {
-        //            return new List<double>() { 2,2,2 };
-        //        }
-        //        return testList;
-        //        //return new List< double>()
-        //        //{
-        //        //    fsInfo.CapacityUsed / 0x40000000,
-        //        //    fsInfo.CapacityRemaining / 0x40000000,
-        //        //    fsInfo.CapacityUsedNonDFS / 0x40000000,
-        //        //    (fsInfo.CapacityTotal - fsInfo.CapacityUsed - fsInfo.CapacityRemaining - fsInfo.CapacityUsedNonDFS) / 0x40000000
-        //        //};
-        //    }
-        //    set
-        //    {
-        //        testList = value;
-        //        OnpropertyChanged("DiskCapacity");
-        //    }
-        //}
+
         public List<HDFSNode> HDFSNodeList { get; set; }
         public Timer QueryTimer { get; set; }
         public TimeSpan startTimeSpan = TimeSpan.Zero;
@@ -168,9 +146,9 @@ namespace CloudFSVisualizer
             Frame.Navigate(typeof(HDFSFilePage), CurrentServer);
         }
 
-        private void HDFSConfigurationButton_Click(object sender, RoutedEventArgs e)
+        private async void HDFSConfigurationButton_Click(object sender, RoutedEventArgs e)
         {
-            CapacityPieChartSeries.ItemsSource = DiskCapacity;
+            await HDFSFileManager.CreateHDFSFile(CurrentServer, "testfile", new Authentication { User = "root" });
         }
 
         private void ServerDetailListGridView_SizeChanged(object sender, SizeChangedEventArgs e)
