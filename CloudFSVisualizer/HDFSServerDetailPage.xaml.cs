@@ -148,7 +148,7 @@ namespace CloudFSVisualizer
 
         private async void HDFSConfigurationButton_Click(object sender, RoutedEventArgs e)
         {
-            await HDFSFileManager.CreateHDFSFile(CurrentServer, "testfile", new Authentication { User = "root" });
+            //await HDFSFileManager.CreateHDFSFile(CurrentServer, "testfile", new Authentication { User = "root" });
         }
 
         private void ServerDetailListGridView_SizeChanged(object sender, SizeChangedEventArgs e)
