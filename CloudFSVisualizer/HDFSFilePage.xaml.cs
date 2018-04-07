@@ -18,6 +18,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Collections.Specialized;
 using Windows.UI.Core;
+using System.Diagnostics;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -100,6 +101,18 @@ namespace CloudFSVisualizer
             }
         }
 
+        private HDFSFile currentFolder;
+        public HDFSFile CurrentFolder
+        {
+            get { return currentFolder; }
+            set
+            {
+                currentFolder = value;
+                OnpropertyChanged("CurrentFolder");
+            }
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public HDFSFilePage()
@@ -118,12 +131,12 @@ namespace CloudFSVisualizer
 
         public async void GetRootFolderAsync()
         {
-            var rootFolder = new HDFSFile()
+            CurrentFolder = new HDFSFile()
             {
                 ServerHost = CurrentServer.MasterNode.Host,
                 Path = ""
             };
-            FileList = await rootFolder.SubFile;
+            FileList = await CurrentFolder.SubFile;
             var pList = new List<PresentData>();
             foreach (var file in FileList)
             {
@@ -142,9 +155,9 @@ namespace CloudFSVisualizer
             GetRootFolderAsync();
         }
 
-        private void GoToPathButton_Click(object sender, RoutedEventArgs e)
+        private async void GoToPathButton_Click(object sender, RoutedEventArgs e)
         {
-
+            await UpdateFolderFromAddressAsync();
         }
 
         private void CreateDirectoryButton_Click(object sender, RoutedEventArgs e)
@@ -152,9 +165,14 @@ namespace CloudFSVisualizer
             CurrentBlock = new LocatedBlock();
         }
 
-        private void UploadFileButton_Click(object sender, RoutedEventArgs e)
+        private async void UploadFileButton_Click(object sender, RoutedEventArgs e)
         {
-
+            var dialog = new HDFSFileUploadContentDialog(CurrentFolder.Path + "/");
+            var result = await dialog.ShowAsync();
+            if (dialog.PickedFile != null)
+            {
+                await HDFSFileManager.UploadHDFSFile(CurrentServer, dialog.PickedFile, dialog.RemotePath);
+            }
         }
 
         private void BlockPresenter_BlockTapped(object sender, RoutedEventArgs e)
@@ -175,7 +193,7 @@ namespace CloudFSVisualizer
 
         }
 
-        private async void HDFSFileGridView_SelectionChangedAsync(object sender, Telerik.UI.Xaml.Controls.Grid.DataGridSelectionChangedEventArgs e)
+        private async void HDFSFileGridView_SelectionChanged(object sender, Telerik.UI.Xaml.Controls.Grid.DataGridSelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count() == 0)
             {
@@ -183,7 +201,8 @@ namespace CloudFSVisualizer
             }
             var list = new List<ServerLocatedBlocks>();
             var item = e.AddedItems.First() as PresentData;
-            var fileItem = item.OriginFile; 
+            var fileItem = item.OriginFile;
+
             if ((await fileItem.Status).type == "FILE")
             {
                 BlockList = (await fileItem.GetBlocksAsync()).locatedBlocks;
@@ -210,7 +229,37 @@ namespace CloudFSVisualizer
             }
             else
             {
+                CurrentFolder = fileItem;
                 FileList = await fileItem.SubFile;
+                var pList = new List<PresentData>();
+                foreach (var file in FileList)
+                {
+                    var presentFile = new PresentData();
+                    await presentFile.InitAsync(file);
+                    pList.Add(presentFile);
+                }
+                PresentList = pList;
+            }
+        }
+
+        private async void FolderPathTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                await UpdateFolderFromAddressAsync();
+            }
+        }
+
+        private async Task UpdateFolderFromAddressAsync()
+        {
+            var Folder = new HDFSFile()
+            {
+                ServerHost = CurrentServer.MasterNode.Host,
+                Path = FolderPathTextBox.Text
+            };
+            if (await Folder.SubFile != null)
+            {
+                FileList = await Folder.SubFile;
                 var pList = new List<PresentData>();
                 foreach (var file in FileList)
                 {
