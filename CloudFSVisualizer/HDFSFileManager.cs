@@ -8,25 +8,37 @@ using System.Threading.Tasks;
 using CloudFSVisualizer.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Windows.Storage;
 
 namespace CloudFSVisualizer
 {
     public class HDFSFileManager
     {
-        public static async Task CreateHDFSFile(HDFSServer server, string filePath, Authentication auth)
+        public static async Task UploadHDFSFile(HDFSServer server, StorageFile localFile, string remotePath)
         {
-            
-            string url = $@"http://{server.MasterNode.Host}:50070/webhdfs/v1/{filePath}?user.name={auth.User}&op=CREATE";
+            string url = @"http://" +
+                server.MasterNode.Host +
+                @":50070/webhdfs/v1" +
+                remotePath +
+                Uri.EscapeDataString(localFile.Name) + 
+                @"?user.name=" + 
+                server.Authentication.User + 
+                "&op=CREATE";
             var handler = new HttpClientHandler()
             {
                 AllowAutoRedirect = false
             };
-
             using (var client = new HttpClient(handler))
+            using (var stream = await localFile.OpenStreamForReadAsync())
             {
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, url);
-                var response = await client.PutAsync(url, null);
-                var responseHeader = response.Headers;
+                // see https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/WebHDFS.html#Create_and_Write_to_a_File for more info.
+                var request1 = new HttpRequestMessage(HttpMethod.Put, url);
+                var response1 = await client.SendAsync(request1);
+                var redirectUrl = response1.Headers.Location.AbsoluteUri;
+
+                var fileContent = new StreamContent(stream);
+                var request2 = new HttpRequestMessage(HttpMethod.Put, redirectUrl) { Content = fileContent };
+                var response2 = await client.SendAsync(request2);
             }
             
         }
