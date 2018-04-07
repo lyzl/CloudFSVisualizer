@@ -16,7 +16,10 @@
                     FlowDirection="LeftToRight"
                     HorizontalAlignment="Left"
                     Orientation="Horizontal">
-                    <TextBox x:Name="FilePathTextBox">
+                    <TextBox 
+                        x:Name="FolderPathTextBox"
+                        Text="{x:Bind CurrentFolder.Path, Mode=OneWay}"
+                        KeyDown="FolderPathTextBox_KeyDown">
 
                     </TextBox>
                     <Button
@@ -42,7 +45,7 @@
             <telerikGrid:RadDataGrid
                 ItemsSource="{x:Bind PresentList, Mode=OneWay}"
                 x:Name="HDFSFileGridView"
-                SelectionChanged="HDFSFileGridView_SelectionChangedAsync"
+                SelectionChanged="HDFSFileGridView_SelectionChanged"
                 SelectionMode="Single">
             </telerikGrid:RadDataGrid>
             <TextBlock Text="{x:Bind BlockList.Count, Mode=OneWay}"/>
