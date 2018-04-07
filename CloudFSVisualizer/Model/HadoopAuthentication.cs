@@ -6,10 +6,16 @@ using System.Threading.Tasks;
 
 namespace CloudFSVisualizer.Model
 {
-    public class Authentication
+    public class HadoopAuthentication
     {
         public string User { get; set; }
-        public AuthenticationType type { get; set; }
+        public AuthenticationType Type { get; set; }
+
+        public HadoopAuthentication(string user)
+        {
+            this.User = user;
+            Type = AuthenticationType.Off;
+        }
     }
 
     public enum AuthenticationType
