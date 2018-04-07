@@ -8,14 +8,20 @@ using System.Threading.Tasks;
 
 namespace CloudFSVisualizer.Model
 {
+
+    public enum ServerType { defaultServer, HDFSServer, YarnServer }
     public abstract class Server
     {
-        public enum ServerType { defaultServer, HDFSServer, YarnServer}
         public ServerType SType { get; set; }
         public string Description { get; set; }
     }
 
-    public class HDFSServer : Server
+    public abstract class HadoopServer : Server
+    {
+        public HadoopAuthentication Authentication { get; set; }
+    }
+
+    public class HDFSServer : HadoopServer
     {
         public HDFSMasterNode MasterNode { get; set; }
         public List<HDFSSlaveNode> SlaveNode { get; set; }
@@ -40,6 +46,30 @@ namespace CloudFSVisualizer.Model
         }
     }
 
+    public class YarnServer : HadoopServer
+    {
+        public YarnResourceManager ResourceManager { get; set; }
+        public List<YarnNodeManager> NodeManager { get; set; }
+
+        //public async Task<FSNamesystem> GetFSNamesystemAsync()
+        //{
+        //    string queryUrl = $@"http://{ResourceManager.Host}:50070/jmx?qry=Hadoop:service=NameNode,name=FSNamesystem";
+        //    var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
+        //    JObject rootObject = JObject.Parse(json);
+        //    JToken infoToken = rootObject["beans"].Children().ToList().First();
+        //    var info = infoToken.ToObject<FSNamesystem>();
+        //    return info;
+        //}
+        //public async Task<NameNodeInfo> GetNameNodeInfoAsync()
+        //{
+        //    string queryUrl = $@"http://{ResourceManager.Host}:50070/jmx?qry=Hadoop:service=NameNode,name=NameNodeInfo";
+        //    var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
+        //    JObject rootObject = JObject.Parse(json);
+        //    JToken infoToken = rootObject["beans"].Children().ToList().First();
+        //    var info = infoToken.ToObject<NameNodeInfo>();
+        //    return info;
+        //}
+    }
 
 
     public class FSNamesystem
