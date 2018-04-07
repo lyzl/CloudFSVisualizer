@@ -33,7 +33,8 @@ namespace CloudFSVisualizer
             ServerList = new List<HDFSServer>();
             var hadoopServer = new HDFSServer()
             {
-                SType = Server.ServerType.HDFSServer,
+                SType = ServerType.HDFSServer,
+                Authentication = new HadoopAuthentication("root"),
                 MasterNode = new HDFSMasterNode
                 {
                     Host = "h1.lingdra.com",
