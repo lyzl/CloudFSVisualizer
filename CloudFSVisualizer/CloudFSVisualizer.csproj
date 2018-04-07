@@ -108,6 +108,9 @@
     <Compile Include="HDFSFilePage.xaml.cs">
       <DependentUpon>HDFSFilePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HDFSFileUploadContentDialog.xaml.cs">
+      <DependentUpon>HDFSFileUploadContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HDFSNodePage.xaml.cs">
       <DependentUpon>HDFSNodePage.xaml</DependentUpon>
     </Compile>
@@ -117,7 +120,7 @@
     <Compile Include="HDFSServerPage.xaml.cs">
       <DependentUpon>HDFSServerPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\Authentication.cs" />
+    <Compile Include="Model\HadoopAuthentication.cs" />
     <Compile Include="Model\HDFSFile.cs" />
     <Compile Include="Model\Node.cs" />
     <Compile Include="NetworkManager.cs" />
@@ -137,6 +140,9 @@
     <Compile Include="ServerManager.cs" />
     <Compile Include="SettingPage.xaml.cs">
       <DependentUpon>SettingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="YarnServerDetailPage.xaml.cs">
+      <DependentUpon>YarnServerDetailPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="YarnServerPage.xaml.cs">
       <DependentUpon>YarnServerPage.xaml</DependentUpon>
@@ -199,6 +205,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="HDFSFileUploadContentDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="HDFSNodePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -224,6 +234,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SettingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="YarnServerDetailPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
