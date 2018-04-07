@@ -177,6 +177,10 @@ namespace CloudFSVisualizer.Model
         public abstract Task<NodeOperatingSystem> OperatingSystemInfo();
     }
 
+    public abstract class YarnNode : HadoopNode
+    {
+
+    }
 
     public class HDFSMasterNode : HDFSNode
     {
@@ -202,6 +206,16 @@ namespace CloudFSVisualizer.Model
             var info = infoToken.ToObject<NodeOperatingSystem>();
             return info;
         }
+    }
+
+    public class YarnResourceManager: YarnNode
+    {
+
+    }
+
+    public class YarnNodeManager: YarnNode
+    {
+
     }
 
     public class NodeOperatingSystem
