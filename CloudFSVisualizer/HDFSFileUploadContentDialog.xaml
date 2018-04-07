@@ -1,0 +1,27 @@
+﻿<ContentDialog
+    x:Class="CloudFSVisualizer.HDFSFileUploadContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CloudFSVisualizer"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Upload file to HDFS"
+    PrimaryButtonText="Upload"
+    SecondaryButtonText="Cancel"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
+
+    <StackPanel>
+        <TextBlock>Remote Path</TextBlock>
+        <TextBox 
+            x:Name="RemotePathTextBox"
+            Text="{x:Bind RemotePath}"/>
+        <TextBlock>Local File</TextBlock>
+        <Button
+            x:Name="PickFileButton"
+            Content="Pick"
+            Click="PickFileButton_Click"/>
+        <TextBox x:Name="LocalFileTextBox"/>
+    </StackPanel>
+</ContentDialog>
