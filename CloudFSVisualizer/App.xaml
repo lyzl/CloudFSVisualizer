@@ -4,5 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CloudFSVisualizer"
     RequestedTheme="Light">
-
+    <Application.Resources>
+        <Style x:Key="AppTextBlockTitleStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="5,5,0,0"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+        <Style x:Key="AppTextBlockContentStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="5,5,0,0"/>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+    </Application.Resources>
 </Application>
