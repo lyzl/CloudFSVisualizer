@@ -5,9 +5,63 @@
     xmlns:local="using:CloudFSVisualizer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model ="using:CloudFSVisualizer.Model"
+    xmlns:telerik="using:Telerik.UI.Xaml.Controls.Chart"
     mc:Ignorable="d">
-
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+        <ScrollViewer>
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel 
+                        Orientation="Vertical"
+                        Grid.Column="1">
+                        <Button
+                            x:Name="YarnSchedulerButton"
+                            Grid.Column="1"
+                            Click="YarnSchedulerButton_Click"
+                            Content="Job Scheduler"
+                            Margin="20"/>
+                        <Button
+                            x:Name="YarnConfigurationButton"
+                            Grid.Column="1"
+                            Click="YarnConfigurationButton_Click"
+                            Content="configuration"
+                            Margin="20"/>
+                    </StackPanel>
+
+                </Grid>
+                
+                <GridView
+                x:Name="ServerDetailListGridView"
+                ItemClick="ServerDetailListGridView_ItemClick"
+                SizeChanged="ServerDetailListGridView_SizeChanged"
+                IsItemClickEnabled="True"
+                ItemsSource="{x:Bind YarnNodeList}"
+                Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <GridView.ItemTemplate>
+                        <DataTemplate
+                        x:DataType="model:Node">
+                            <local:YarnNodeItemUC/>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                    <GridView.ItemContainerStyle>
+                        <Style TargetType="GridViewItem">
+                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            <Setter Property="VerticalAlignment" Value="Stretch"/>
+                        </Style>
+                    </GridView.ItemContainerStyle>
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                </GridView>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
