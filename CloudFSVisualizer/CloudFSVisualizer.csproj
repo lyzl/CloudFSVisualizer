@@ -111,11 +111,17 @@
     <Compile Include="HDFSFileUploadContentDialog.xaml.cs">
       <DependentUpon>HDFSFileUploadContentDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HDFSNodeItemUC.xaml.cs">
+      <DependentUpon>HDFSNodeItemUC.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HDFSNodePage.xaml.cs">
       <DependentUpon>HDFSNodePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="HDFSServerDetailPage.xaml.cs">
       <DependentUpon>HDFSServerDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HDFSServerItemUC.xaml.cs">
+      <DependentUpon>HDFSServerItemUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="HDFSServerPage.xaml.cs">
       <DependentUpon>HDFSServerPage.xaml</DependentUpon>
@@ -124,12 +130,6 @@
     <Compile Include="Model\HDFSFile.cs" />
     <Compile Include="Model\Node.cs" />
     <Compile Include="NetworkManager.cs" />
-    <Compile Include="NodeConfigurationPage.xaml.cs">
-      <DependentUpon>NodeConfigurationPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="NodeItemUC.xaml.cs">
-      <DependentUpon>NodeItemUC.xaml</DependentUpon>
-    </Compile>
     <Compile Include="NodeManager.cs" />
     <Compile Include="Model\Server.cs" />
     <Compile Include="PieLabelStrategy.cs" />
@@ -141,8 +141,20 @@
     <Compile Include="SettingPage.xaml.cs">
       <DependentUpon>SettingPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="YarnNodeItemUC.xaml.cs">
+      <DependentUpon>YarnNodeItemUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="YarnNodePage.xaml.cs">
+      <DependentUpon>YarnNodePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="YarnSchedularPage.xaml.cs">
+      <DependentUpon>YarnSchedularPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="YarnServerDetailPage.xaml.cs">
       <DependentUpon>YarnServerDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="YarnServerItemUC.xaml.cs">
+      <DependentUpon>YarnServerItemUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="YarnServerPage.xaml.cs">
       <DependentUpon>YarnServerPage.xaml</DependentUpon>
@@ -209,6 +221,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="HDFSNodeItemUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="HDFSNodePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -217,15 +233,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="HDFSServerItemUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="HDFSServerPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="NodeConfigurationPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="NodeItemUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -237,7 +249,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="YarnNodeItemUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="YarnNodePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="YarnSchedularPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="YarnServerDetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="YarnServerItemUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
