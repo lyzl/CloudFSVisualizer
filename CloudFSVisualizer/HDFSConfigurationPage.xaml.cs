@@ -18,6 +18,7 @@ using Windows.UI.Popups;
 using System.Threading.Tasks;
 using Renci.SshNet;
 using Windows.UI.Core;
+using CloudFSVisualizer.Assets;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -81,31 +82,42 @@ namespace CloudFSVisualizer
                 ExecutingButton.IsEnabled = false;
 
                 Task.Run(async () => {
-                    var cmd = CurrentNodeSshClient.CreateCommand(CurrentNode.HadoopHomeDirectory + filePath);
-                    var result = cmd.BeginExecute();
-                    using (var stdOutReader = new StreamReader(cmd.OutputStream))
-                    using (var stdErrReader = new StreamReader(cmd.ExtendedOutputStream))
+                    try
                     {
-                        while (!result.IsCompleted || !stdOutReader.EndOfStream || !stdErrReader.EndOfStream)
+                        var cmd = CurrentNodeSshClient.CreateCommand(CurrentNode.HadoopHomeDirectory + filePath);
+                        var result = cmd.BeginExecute();
+                        using (var stdOutReader = new StreamReader(cmd.OutputStream))
+                        using (var stdErrReader = new StreamReader(cmd.ExtendedOutputStream))
                         {
-                            string outLine = stdOutReader.ReadLine();
-                            if (outLine != null)
+                            while (!result.IsCompleted || !stdOutReader.EndOfStream || !stdErrReader.EndOfStream)
                             {
-                                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                                string outLine = stdOutReader.ReadLine();
+                                if (outLine != null)
                                 {
-                                    ContentTextBox.Text += outLine + "\n";
-                                });
-                            }
-                            string errLine = stdErrReader.ReadLine();
-                            if (errLine != null)
-                            {
-                                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                                    {
+                                        ContentTextBox.Text += outLine + "\n";
+                                    });
+                                }
+                                string errLine = stdErrReader.ReadLine();
+                                if (errLine != null)
                                 {
-                                    ContentTextBox.Text += errLine + "\n";
-                                });
+                                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                                    {
+                                        ContentTextBox.Text += errLine + "\n";
+                                    });
+                                }
                             }
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        if (AppShell.Current != null)
+                        {
+                            AppShell.Current.NotifyMessage($"Error occoured when excuting commands:\n{ex.Message}");
+                        }
+                    }
+
 
                     await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
@@ -147,10 +159,12 @@ namespace CloudFSVisualizer
 
         private async void FileComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count > 0)
+            List<object> addedItemlist = new List<object>(e.AddedItems);
+            if (addedItemlist.Count > 0)
             {
-                if (e.AddedItems.First() is string item && FileComboBox.SelectedItem is string file)
+                if (addedItemlist.First() is string item && FileTypeComboBox.SelectedItem is string file)
                 {
+                    ContentTextBox.Text = string.Empty;
                     switch (file)
                     {
                         case "Configuration":
@@ -166,7 +180,6 @@ namespace CloudFSVisualizer
                         default:
                             break;
                     }
-                    ContentTextBox.Text = string.Empty;
                 }
             }
         }
