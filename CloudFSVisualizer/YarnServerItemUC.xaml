@@ -1,0 +1,37 @@
+﻿<UserControl
+    x:Class="CloudFSVisualizer.YarnServerItemUC"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CloudFSVisualizer"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="Azure" Padding="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel
+            VerticalAlignment="Stretch"
+            Grid.Column="0"
+            Margin="10,5,0,0">
+            <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Description:</TextBlock>
+            <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Creating From:</TextBlock>
+            <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Start From:</TextBlock>
+            <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">State:</TextBlock>
+            <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Node Amount:</TextBlock>
+        </StackPanel>
+
+        <StackPanel
+            VerticalAlignment="Stretch"
+            Grid.Column="1"
+            Margin="10,5,0,0">
+            <TextBlock Style="{StaticResource AppTextBlockContentStyle}">The first Yarn server in system.</TextBlock>
+            <TextBlock Style="{StaticResource AppTextBlockContentStyle}">Sun Feb 11 16:21:19 +0000 2018</TextBlock>
+            <TextBlock Style="{StaticResource AppTextBlockContentStyle}">Sun Feb 11 16:21:19 +0000 2018</TextBlock>
+            <TextBlock Style="{StaticResource AppTextBlockContentStyle}">STARTED</TextBlock>
+            <TextBlock Style="{StaticResource AppTextBlockContentStyle}">4</TextBlock>
+        </StackPanel>
+    </Grid>
+</UserControl>
