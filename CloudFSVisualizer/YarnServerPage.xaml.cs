@@ -75,7 +75,7 @@ namespace CloudFSVisualizer
 
         private void ServerListGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var item = e.ClickedItem as HDFSServer;
+            var item = e.ClickedItem as YarnServer;
             Frame.Navigate(typeof(YarnServerDetailPage), item);
         }
 

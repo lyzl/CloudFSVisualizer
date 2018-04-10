@@ -29,13 +29,6 @@ namespace CloudFSVisualizer
     public sealed partial class HDFSServerDetailPage : Page, INotifyPropertyChanged
     {
         public HDFSServer CurrentServer { get; set; }
-        private List<double> testList;
-
-        public List<double> TestList
-        {
-            get { return testList; }
-            set {testList = value; }
-        }
 
         private FSNamesystem fsInfo;
         public FSNamesystem FSInfo
@@ -46,6 +39,7 @@ namespace CloudFSVisualizer
                 fsInfo = value;
                 OnpropertyChanged("FSInfo");
                 CapacityPieChartSeries.ItemsSource = DiskCapacity;
+                NodesCountPieChartSeries.ItemsSource = NodesCounting;
             }
         }
         public List<Tuple<string, double>> DiskCapacity
@@ -58,11 +52,31 @@ namespace CloudFSVisualizer
                 }
                 return new List<Tuple<string, double>>()
                 {
-                    new Tuple<string, double>("CapacityUsed",fsInfo.CapacityUsed / 0x40000000),
-                    new Tuple<string, double>("CapacityRemaining",fsInfo.CapacityRemaining / 0x40000000),
-                    new Tuple<string, double>("CapacityUsedNonDFS",fsInfo.CapacityUsedNonDFS / 0x40000000),
+                    new Tuple<string, double>("Used",fsInfo.CapacityUsed / 0x40000000),
+                    new Tuple<string, double>("Remaining",fsInfo.CapacityRemaining / 0x40000000),
+                    new Tuple<string, double>("NonDFSUsed",fsInfo.CapacityUsedNonDFS / 0x40000000),
                     new Tuple<string, double>("Reserved",(fsInfo.CapacityTotal - fsInfo.CapacityUsed - fsInfo.CapacityRemaining - fsInfo.CapacityUsedNonDFS) / 0x40000000)
                 };
+            }
+        }
+        public List<Tuple<string, int>> NodesCounting
+        {
+            get
+            {
+                if (fsInfo == null)
+                {
+                    return null;
+                }
+                var nodeList = new List<Tuple<string, int>>();
+                if (fsInfo.NumLiveDataNodes != 0)
+                {
+                    nodeList.Add(new Tuple<string, int>("Live", fsInfo.NumLiveDataNodes));
+                }
+                if (fsInfo.NumDeadDataNodes != 0)
+                {
+                    nodeList.Add(new Tuple<string, int>("Dead", fsInfo.NumDeadDataNodes));
+                }
+                return nodeList;
             }
         }
 
@@ -98,23 +112,6 @@ namespace CloudFSVisualizer
             _queryLock,
             startTimeSpan,
             periodicTimeSpan);
-            //TestList = new List<double>() { 1, 2, 3 };
-            //DiskCapacity = new List<double>() { 1, 2, 3 };
-            CapacityPieChartSeries.ItemsSource = DiskCapacity;
-
-            //CapacityPieChartSeries.ValueBinding = new GenericDataPointBinding<Tuple<string, double>, double>()
-            //{
-            //    ValueSelector = item => item.Item2,
-            //};
-            //var Label = new ChartSeriesLabelDefinition();
-            //ChartSeriesLabelDefinition.Strategy = new GenericDataPointBinding<Tuple<string, double>, double>()
-            //{
-            //    ValueSelector = item => item.Item2,
-            //};
-            //CapacityPieChartSeries.ValueBinding = new GenericDataPointBinding<int,int>()
-            //{
-            //    ValueSelector = item => item,
-            //};
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

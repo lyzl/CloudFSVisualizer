@@ -9,19 +9,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <ListView
+    <GridView
         ItemsSource="{x:Bind ServerList}"
         x:Name="ServerListGridView"
         ItemClick="ServerListGridView_ItemClick"
         SizeChanged="ServerListGridView_SizeChanged"
         IsItemClickEnabled="true"
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ListView.ItemTemplate>
+        <GridView.ItemTemplate>
             <DataTemplate x:DataType="model:YarnServer">
-                <local:ServerItemUC 
-                    Height="300"
-                    Width="400"/>
+                <local:YarnServerItemUC/>
             </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+        </GridView.ItemTemplate>
+    </GridView>
 </Page>

@@ -19,12 +19,49 @@
         <StackPanel>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                <StackPanel
+                    Orientation="Horizontal"
+                    Grid.Column="0">
+                    <StackPanel
+                        Grid.Column="0"
+                        Margin="20,5,5,5">
+                        <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Name:</TextBlock>
+                        <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Tag:</TextBlock>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Column="1"
+                        Margin="40,5,5,5">
+                        <TextBlock Style="{StaticResource AppTextBlockContentStyle}">Hadoop Cluster</TextBlock>
+                        <TextBlock Style="{StaticResource AppTextBlockContentStyle}">Located in London</TextBlock>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel
+                    Orientation="Horizontal"
+                    Grid.Column="1">
+                    <StackPanel
+                        Grid.Column="0"
+                        Margin="20,5,5,5">
+                        <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Security:</TextBlock>
+                        <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">SafeMode:</TextBlock>
+                        <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">File and Directories:</TextBlock>
+                        <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Blocks:</TextBlock>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Column="1"
+                        Margin="40,5,5,5">
+                        <TextBlock Style="{StaticResource AppTextBlockContentStyle}">Off</TextBlock>
+                        <TextBlock Style="{StaticResource AppTextBlockContentStyle}">Off</TextBlock>
+                        <TextBlock Style="{StaticResource AppTextBlockContentStyle}">14</TextBlock>
+                        <TextBlock Style="{StaticResource AppTextBlockContentStyle}">55</TextBlock>
+                    </StackPanel>
+                </StackPanel>
                 <StackPanel 
                 Orientation="Vertical"
-                Grid.Column="1">
+                Grid.Column="2">
                     <Button
                     x:Name="HDFSFilePageButton"
                     Grid.Column="1"
@@ -40,23 +77,49 @@
                 </StackPanel>
 
             </Grid>
-            <telerik:RadPieChart
+            <Grid
+                Margin="0,50">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <telerik:RadPieChart
+                x:Name="NodesCountPieChart"
+                PaletteName="DefaultDark"
+                Grid.Column="0"
+                Height="300"
+                HorizontalAlignment="Stretch"
+                Margin="5">
+                    <telerik:PieSeries
+                    x:Name="NodesCountPieChartSeries"
+                    ItemsSource="{Binding NodesCounting}">
+                        <telerik:PieSeries.ValueBinding>
+                            <telerik:PropertyNameDataPointBinding PropertyName="Item2"/>
+                        </telerik:PieSeries.ValueBinding>
+                        <telerik:PieSeries.LabelDefinitions>
+                            <telerik:ChartSeriesLabelDefinition Margin="-5" Strategy="{StaticResource Strategy}"/>
+                        </telerik:PieSeries.LabelDefinitions>
+                    </telerik:PieSeries>
+                </telerik:RadPieChart>
+                <telerik:RadPieChart
                 x:Name="CapacityPieChart"
                 PaletteName="DefaultDark"
-                Height="500"
+                Grid.Column="1"
+                Height="300"
                 HorizontalAlignment="Stretch"
-                Margin="50">
-                <telerik:PieSeries
+                Margin="5">
+                    <telerik:PieSeries
                     x:Name="CapacityPieChartSeries"
                     ItemsSource="{Binding DiskCapacity}">
-                    <telerik:PieSeries.ValueBinding>
-                        <telerik:PropertyNameDataPointBinding PropertyName="Item2"/>
-                    </telerik:PieSeries.ValueBinding>
-                    <telerik:PieSeries.LabelDefinitions>
-                        <telerik:ChartSeriesLabelDefinition Margin="-15" Strategy="{StaticResource Strategy}"/>
-                    </telerik:PieSeries.LabelDefinitions>
-                </telerik:PieSeries>
-            </telerik:RadPieChart>
+                        <telerik:PieSeries.ValueBinding>
+                            <telerik:PropertyNameDataPointBinding PropertyName="Item2"/>
+                        </telerik:PieSeries.ValueBinding>
+                        <telerik:PieSeries.LabelDefinitions>
+                            <telerik:ChartSeriesLabelDefinition Margin="-5" Strategy="{StaticResource Strategy}"/>
+                        </telerik:PieSeries.LabelDefinitions>
+                    </telerik:PieSeries>
+                </telerik:RadPieChart>
+            </Grid>
             <GridView
                 x:Name="ServerDetailListGridView"
                 ItemClick="ServerDetailListGridView_ItemClick"
@@ -66,9 +129,9 @@
                 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                 <GridView.ItemTemplate>
                     <DataTemplate
-                        x:DataType="model:Node">
-                        <local:NodeItemUC 
-                            Height="300"
+                        x:DataType="model:HDFSNode">
+                        <local:HDFSNodeItemUC
+                            Height="200"
                             Width="400"
                             />
                     </DataTemplate>
