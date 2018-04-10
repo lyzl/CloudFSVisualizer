@@ -8,54 +8,80 @@
     xmlns:model="using:CloudFSVisualizer.Model"
     xmlns:telerikGrid="using:Telerik.UI.Xaml.Controls.Grid"
     mc:Ignorable="d">
-
+    <Page.Resources>
+        <Style 
+            x:Key="HDFSFilePageButtonStyle"
+            TargetType="Button">
+            <Setter Property="Width" Value="80"/>
+        </Style>
+    </Page.Resources>
     <ScrollViewer Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel>
-            <Grid>
-                <StackPanel 
-                    FlowDirection="LeftToRight"
-                    HorizontalAlignment="Left"
-                    Orientation="Horizontal">
-                    <TextBox 
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox 
                         x:Name="FolderPathTextBox"
+                        HorizontalAlignment="Stretch"
                         Text="{x:Bind CurrentFolder.Path, Mode=OneWay}"
                         KeyDown="FolderPathTextBox_KeyDown">
 
-                    </TextBox>
-                    <Button
-                        x:Name="GoToPathButton"
-                        Content="Go"
-                        Click="GoToPathButton_Click"/>
-                </StackPanel>
+                </TextBox>
+
                 <StackPanel 
                     FlowDirection="RightToLeft"
                     HorizontalAlignment="Right"
+                    Grid.Column="1"
                     Orientation="Horizontal">
+                    
                     <Button
                         x:Name="CreateDirectoryButton"
                         Content="Create"
+                        Style="{StaticResource HDFSFilePageButtonStyle}"
+                        Margin="5,0,0,0"
                         Click="CreateDirectoryButton_Click"/>
                     <Button
                         x:Name="UploadFileButton"
                         Content="Upload"
+                        Style="{StaticResource HDFSFilePageButtonStyle}"
+                        Margin="5,0,0,0"
                         Click="UploadFileButton_Click"/>
+                    <Button
+                        x:Name="GoToPathButton"
+                        Content="Go"
+                        Margin="100,0,0,0"
+                        Style="{StaticResource HDFSFilePageButtonStyle}"
+                        Click="GoToPathButton_Click"/>
                 </StackPanel>
 
             </Grid>
             <telerikGrid:RadDataGrid
+                Margin="10"
                 ItemsSource="{x:Bind PresentList, Mode=OneWay}"
                 x:Name="HDFSFileGridView"
                 SelectionChanged="HDFSFileGridView_SelectionChanged"
                 SelectionMode="Single">
             </telerikGrid:RadDataGrid>
-            <TextBlock Text="{x:Bind BlockList.Count, Mode=OneWay}"/>
+            <StackPanel
+                Orientation="Horizontal"
+                Margin="10">
+                <TextBlock
+                    Style="{StaticResource AppTextBlockTitleStyle}">Total Blocks:</TextBlock>
+                <TextBlock
+                    Style="{StaticResource AppTextBlockContentStyle}"
+                    Text="{x:Bind BlockList.Count, Mode=OneWay}"/>
+            </StackPanel>
             <local:BlockPresenterUC
                 x:Name="TotalBlocksPresenter"
+                Margin="10"
                 BlockTapped="BlockPresenter_BlockTapped"
                 HighlightBlock="{x:Bind CurrentBlock, Mode=OneWay}"
                 ItemsSource="{x:Bind BlockList, Mode=OneWay}"/>
             <ScrollViewer
                 Grid.Row="2"
+                Margin="10"
                 ScrollViewer.VerticalScrollBarVisibility="Disabled" 
                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollMode="Enabled"                  
@@ -70,7 +96,9 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="model:ServerLocatedBlocks">
                             <StackPanel Width="400">
-                                <TextBlock Text="{x:Bind HostName}"/>
+                                <TextBlock
+                                    FontSize="18"
+                                    Text="{x:Bind HostName}"/>
                                 <local:BlockPresenterUC
                                     x:Name="DistributedBlocksPresenter" 
                                     BlockTapped="BlockPresenter_BlockTapped"
