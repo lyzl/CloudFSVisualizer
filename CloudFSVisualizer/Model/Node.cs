@@ -147,6 +147,9 @@ namespace CloudFSVisualizer.Model
             @"sbin/stop-balancer.sh",
             @"sbin/test",
         };
+
+        public virtual int ServicePort { get; protected set; }
+
         public async Task<Stream> GetConfigurationAsStream(string RelativeFilePath)
         {
             if (AvaliableConfiguration.Contains(RelativeFilePath))
@@ -158,7 +161,6 @@ namespace CloudFSVisualizer.Model
                 throw new Exception("The configuration file is not allowed to access");
             }
         }
-
         public async Task UploadConfigurationFromStream(string RelativeFilePath, Stream stream)
         {
             if (AvaliableConfiguration.Contains(RelativeFilePath))
@@ -170,52 +172,49 @@ namespace CloudFSVisualizer.Model
                 throw new Exception("The configuration file is not allowed to access");
             }
         }
+        public async Task<NodeOperatingSystem> GetOperatingSystemInfoAsync()
+        {
+            string queryUrl = $@"http://{Host}:{ServicePort}/jmx?qry=java.lang:type=OperatingSystem";
+            var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
+            if (json == null)
+            {
+                return null;
+            }
+            JObject rootObject = JObject.Parse(json);
+            JToken infoToken = rootObject["beans"].Children().ToList().First();
+            var info = infoToken.ToObject<NodeOperatingSystem>();
+            return info;
+        }
     }
 
-    public abstract class HDFSNode: HadoopNode
+    public abstract class HDFSNode: HadoopNode 
     {
-        public abstract Task<NodeOperatingSystem> OperatingSystemInfo();
+        
     }
 
     public abstract class YarnNode : HadoopNode
     {
-
+        
     }
 
     public class HDFSMasterNode : HDFSNode
     {
-        public override async Task<NodeOperatingSystem> OperatingSystemInfo()
-        {
-            string queryUrl = $@"http://{Host}:50070/jmx?qry=java.lang:type=OperatingSystem";
-            var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
-            JObject rootObject = JObject.Parse(json);
-            JToken infoToken = rootObject["beans"].Children().ToList().First();
-            var info = infoToken.ToObject<NodeOperatingSystem>();
-            return info;
-        }
+        public override int ServicePort { get; protected set; } = 50070;
     }
 
     public class HDFSSlaveNode : HDFSNode
     {
-        public override async Task<NodeOperatingSystem> OperatingSystemInfo()
-        {
-            string queryUrl = $@"http://{Host}:50075/jmx?qry=java.lang:type=OperatingSystem";
-            var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
-            JObject rootObject = JObject.Parse(json);
-            JToken infoToken = rootObject["beans"].Children().ToList().First();
-            var info = infoToken.ToObject<NodeOperatingSystem>();
-            return info;
-        }
+        public override int ServicePort { get; protected set; } = 50075;
     }
 
     public class YarnResourceManager: YarnNode
     {
-
+        public override int ServicePort { get; protected set; } = 8088;
     }
 
     public class YarnNodeManager: YarnNode
     {
-
+        public override int ServicePort { get; protected set; } = 8042;
     }
 
     public class NodeOperatingSystem
@@ -238,5 +237,23 @@ namespace CloudFSVisualizer.Model
         public int AvailableProcessors { get; set; }
         public string Name { get; set; }
         public string ObjectName { get; set; }
+    }
+
+    public class NodeInfo
+    {
+        public string hadoopVersionBuiltOn { get; set; }
+        public string nodeManagerBuildVersion { get; set; }
+        public long lastNodeUpdateTime { get; set; }
+        public int totalVmemAllocatedContainersMB { get; set; }
+        public int totalVCoresAllocatedContainers { get; set; }
+        public bool nodeHealthy { get; set; }
+        public string healthReport { get; set; }
+        public int totalPmemAllocatedContainersMB { get; set; }
+        public string nodeManagerVersionBuiltOn { get; set; }
+        public string nodeManagerVersion { get; set; }
+        public string id { get; set; }
+        public string hadoopBuildVersion { get; set; }
+        public string nodeHostName { get; set; }
+        public string hadoopVersion { get; set; }
     }
 }

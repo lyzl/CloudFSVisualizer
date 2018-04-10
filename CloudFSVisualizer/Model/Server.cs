@@ -30,6 +30,10 @@ namespace CloudFSVisualizer.Model
         {
             string queryUrl = $@"http://{MasterNode.Host}:50070/jmx?qry=Hadoop:service=NameNode,name=FSNamesystem";
             var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
+            if (json == null)
+            {
+                return null;
+            }
             JObject rootObject = JObject.Parse(json);
             JToken infoToken = rootObject["beans"].Children().ToList().First();
             var info = infoToken.ToObject<FSNamesystem>();
@@ -39,6 +43,10 @@ namespace CloudFSVisualizer.Model
         {
             string queryUrl = $@"http://{MasterNode.Host}:50070/jmx?qry=Hadoop:service=NameNode,name=NameNodeInfo";
             var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
+            if (json == null)
+            {
+                return null;
+            }
             JObject rootObject = JObject.Parse(json);
             JToken infoToken = rootObject["beans"].Children().ToList().First();
             var info = infoToken.ToObject<NameNodeInfo>();
@@ -51,26 +59,49 @@ namespace CloudFSVisualizer.Model
         public YarnResourceManager ResourceManager { get; set; }
         public List<YarnNodeManager> NodeManager { get; set; }
 
-        //public async Task<FSNamesystem> GetFSNamesystemAsync()
-        //{
-        //    string queryUrl = $@"http://{ResourceManager.Host}:50070/jmx?qry=Hadoop:service=NameNode,name=FSNamesystem";
-        //    var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
-        //    JObject rootObject = JObject.Parse(json);
-        //    JToken infoToken = rootObject["beans"].Children().ToList().First();
-        //    var info = infoToken.ToObject<FSNamesystem>();
-        //    return info;
-        //}
-        //public async Task<NameNodeInfo> GetNameNodeInfoAsync()
-        //{
-        //    string queryUrl = $@"http://{ResourceManager.Host}:50070/jmx?qry=Hadoop:service=NameNode,name=NameNodeInfo";
-        //    var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
-        //    JObject rootObject = JObject.Parse(json);
-        //    JToken infoToken = rootObject["beans"].Children().ToList().First();
-        //    var info = infoToken.ToObject<NameNodeInfo>();
-        //    return info;
-        //}
-    }
+        public async Task<FSNamesystem> GetFSNamesystemAsync()
+        {
+            string queryUrl = $@"http://{ResourceManager.Host}:8088/jmx?qry=Hadoop:service=NameNode,name=FSNamesystem";
+            var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
+            if (json == null)
+            {
+                return null;
+            }
+            JObject rootObject = JObject.Parse(json);
+            JToken infoToken = rootObject["beans"].Children().ToList().First();
+            var info = infoToken.ToObject<FSNamesystem>();
+            return info;
+        }
 
+        public async Task<ClusterInfo> GetClusterInfoAsync()
+        {
+            string queryUrl = $@"http://{ResourceManager.Host}:8088/ws/v1/cluster/info";
+            var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
+            if (json == null)
+            {
+                return null;
+            }
+            JObject rootObject = JObject.Parse(json);
+            JToken infoToken = rootObject["clusterInfo"];
+            var info = infoToken.ToObject<ClusterInfo>();
+            return info;
+        }
+
+        public async Task<ClusterMetrics> GetClusterMetricsAsync()
+        {
+            string queryUrl = $@"http://{ResourceManager.Host}:8088/ws/v1/cluster/metrics";
+            var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
+            if (json == null)
+            {
+                return null;
+            }
+            JObject rootObject = JObject.Parse(json);
+            JToken infoToken = rootObject["clusterMetrics"];
+            var info = infoToken.ToObject<ClusterMetrics>();
+            return info;
+        }
+
+    }
 
     public class FSNamesystem
     {
@@ -182,5 +213,140 @@ namespace CloudFSVisualizer.Model
         public string NameDirSize { get; set; }
         public object RollingUpgradeStatus { get; set; }
         public int Threads { get; set; }
+    }
+
+    public class ClusterInfo
+    {
+        public long id { get; set; }
+        public long startedOn { get; set; }
+        public string state { get; set; }
+        public string haState { get; set; }
+        public string rmStateStoreName { get; set; }
+        public string resourceManagerVersion { get; set; }
+        public string resourceManagerBuildVersion { get; set; }
+        public string resourceManagerVersionBuiltOn { get; set; }
+        public string hadoopVersion { get; set; }
+        public string hadoopBuildVersion { get; set; }
+        public string hadoopVersionBuiltOn { get; set; }
+        public string haZooKeeperConnectionState { get; set; }
+    }
+
+    public class ClusterMetrics
+    {
+        public int appsSubmitted { get; set; }
+        public int appsCompleted { get; set; }
+        public int appsPending { get; set; }
+        public int appsRunning { get; set; }
+        public int appsFailed { get; set; }
+        public int appsKilled { get; set; }
+        public int reservedMB { get; set; }
+        public int availableMB { get; set; }
+        public int allocatedMB { get; set; }
+        public int reservedVirtualCores { get; set; }
+        public int availableVirtualCores { get; set; }
+        public int allocatedVirtualCores { get; set; }
+        public int containersAllocated { get; set; }
+        public int containersReserved { get; set; }
+        public int containersPending { get; set; }
+        public int totalMB { get; set; }
+        public int totalVirtualCores { get; set; }
+        public int totalNodes { get; set; }
+        public int lostNodes { get; set; }
+        public int unhealthyNodes { get; set; }
+        public int decommissioningNodes { get; set; }
+        public int decommissionedNodes { get; set; }
+        public int rebootedNodes { get; set; }
+        public int activeNodes { get; set; }
+        public int shutdownNodes { get; set; }
+    }
+
+    public class ResourcesUsed
+    {
+        public int memory { get; set; }
+        public int vCores { get; set; }
+    }
+
+    public class LeafQueue:Queue
+    {
+        public int maxActiveApplications { get; set; }
+        public int maxActiveApplicationsPerUser { get; set; }
+        public int maxApplications { get; set; }
+        public int maxApplicationsPerUser { get; set; }
+        public int numActiveApplications { get; set; }
+        public int numContainers { get; set; }
+        public int numPendingApplications { get; set; }
+        public string type { get; set; }
+        public int userLimit { get; set; }
+        public double userLimitFactor { get; set; }
+        public object users { get; set; }
+    }
+
+    public class User
+    {
+        public int numActiveApplications { get; set; }
+        public int numPendingApplications { get; set; }
+        public ResourcesUsed resourcesUsed { get; set; }
+        public string username { get; set; }
+    }
+
+    public class Users
+    {
+        public List<User> user { get; set; }
+    }
+
+    public class BranchQueue:Queue
+    {
+        public Queues queues { get; set; }
+        public int maxActiveApplications { get; set; }
+        public int maxActiveApplicationsPerUser { get; set; }
+        public int maxApplications { get; set; }
+        public int maxApplicationsPerUser { get; set; }
+        public int numActiveApplications { get; set; }
+        public int numContainers { get; set; }
+        public int numPendingApplications { get; set; }
+        public string type { get; set; }
+        public int userLimit { get; set; }
+        public double userLimitFactor { get; set; }
+        public Users users { get; set; }
+    }
+
+    public class RootQueue: Queue
+    {
+        public Queues queues { get; set; }
+    }
+
+    public class Queue
+    {
+        public double absoluteCapacity { get; set; }
+        public double absoluteMaxCapacity { get; set; }
+        public double absoluteUsedCapacity { get; set; }
+        public double capacity { get; set; }
+        public double maxCapacity { get; set; }
+        public int numApplications { get; set; }
+        public string queueName { get; set; }
+        public ResourcesUsed resourcesUsed { get; set; }
+        public string state { get; set; }
+        public double usedCapacity { get; set; }
+        public string usedResources { get; set; }
+    }
+
+    public class Queues
+    {
+        public List<Queue> queue { get; set; }
+    }
+
+    public class SchedulerInfo
+    {
+        public double capacity { get; set; }
+        public double maxCapacity { get; set; }
+        public string queueName { get; set; }
+        public Queues queues { get; set; }
+        public string type { get; set; }
+        public double usedCapacity { get; set; }
+    }
+
+    public class Scheduler
+    {
+        public SchedulerInfo schedulerInfo { get; set; }
     }
 }
