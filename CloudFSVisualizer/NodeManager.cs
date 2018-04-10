@@ -14,23 +14,10 @@ namespace CloudFSVisualizer
     public class NodeManager
     {
 
-        public static async Task<NodeStatus> GetNodeConnectionStatus(Node node)
+        public static async Task<NodeStatus> GetNodeConnectionStatus(HadoopNode node)
         {
 
             NodeStatus status = NodeStatus.Unknown;
-            string port;
-            if (node is HDFSMasterNode)
-            {
-                port = "50070";
-            }
-            else if (node is HDFSSlaveNode)
-            {
-                port = "50075";
-            }
-            else
-            {
-                port = "80";
-            }
 
             try
             {
@@ -38,7 +25,7 @@ namespace CloudFSVisualizer
                 {
                     await tcpClient.ConnectAsync(
                         new Windows.Networking.HostName(node.Host),
-                        port,
+                        node.ServicePort.ToString(),
                         SocketProtectionLevel.PlainSocket).AsTask();
 
                     var localIp = tcpClient.Information.LocalAddress.DisplayName;
