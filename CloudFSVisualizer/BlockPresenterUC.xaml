@@ -26,7 +26,6 @@
         ScrollViewer.VerticalScrollBarVisibility="Auto"
         ScrollViewer.VerticalScrollMode="Enabled"
         ItemsSource="{x:Bind ItemsSource, Mode=OneWay}"
-        Background="LightGray"
         >
         <GridView.ItemTemplate>
             <DataTemplate x:DataType="model:LocatedBlock">
