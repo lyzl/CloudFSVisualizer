@@ -1,0 +1,44 @@
+﻿<UserControl
+    x:Class="CloudFSVisualizer.HDFSNodeItemUC"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CloudFSVisualizer"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="200"
+    d:DesignWidth="400">
+
+    <UserControl.Resources>
+        <local:NodeStatusToColorConverter x:Key="ColorConvertor"/>
+    </UserControl.Resources>
+    <Grid
+        Background="{x:Bind Status, Converter={StaticResource ColorConvertor}}">
+        <StackPanel
+            Orientation="Horizontal"
+            VerticalAlignment="Center">
+            <StackPanel
+                Margin="5">
+                <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Host:</TextBlock>
+                <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Connection:</TextBlock>
+                <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Status:</TextBlock>
+                <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">DFS Used:</TextBlock>
+            </StackPanel>
+            <StackPanel
+                Margin="5">
+                <TextBlock
+                    Style="{StaticResource AppTextBlockContentStyle}"
+                    Text="{x:Bind NodeItem.Host}"/>
+                <TextBlock
+                    Style="{StaticResource AppTextBlockContentStyle}"
+                    Text="Connected"/>
+                <TextBlock
+                    Style="{StaticResource AppTextBlockContentStyle}"
+                    Text="Live"/>
+                <TextBlock
+                    Style="{StaticResource AppTextBlockContentStyle}"
+                    Text="20%"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>
