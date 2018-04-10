@@ -56,7 +56,11 @@ namespace CloudFSVisualizer
                 _queryLock.Reset();
                 await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
-                    var value = await CurrentNode.OperatingSystemInfo();
+                    var value = await CurrentNode.GetOperatingSystemInfoAsync();
+                    if (value == null)
+                    {
+                        return;
+                    }
                     SysInfoList.RemoveAt(0);
                     SysInfoList.Add(value);
                 });

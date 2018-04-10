@@ -9,6 +9,7 @@ using SshNet;
 using CloudFSVisualizer.Model;
 using Renci.SshNet;
 using Windows.Storage;
+using CloudFSVisualizer.Assets;
 
 namespace CloudFSVisualizer
 {
@@ -17,13 +18,25 @@ namespace CloudFSVisualizer
         public static async Task<Stream> FetchStreamDataFromUri(Uri uri)
         {
             Stream responseStream = null;
+
             using (var http = new HttpClient())
             {
-                var response = await http.GetAsync(uri);
-                if (response.IsSuccessStatusCode == true)
+                try
                 {
-                    responseStream = await response.Content.ReadAsStreamAsync();
+                    var response = await http.GetAsync(uri);
+                    if (response.IsSuccessStatusCode == true)
+                    {
+                        responseStream = await response.Content.ReadAsStreamAsync();
+                    }
                 }
+                catch (Exception e)
+                {
+                    if (AppShell.Current != null)
+                    {
+                        AppShell.Current.NotifyMessage($"Network Connection error: \n{e.Message}");
+                    }
+                }
+
             }
             return responseStream;
 
@@ -32,13 +45,25 @@ namespace CloudFSVisualizer
         public static async Task<string> FetchStringDataFromUri(Uri uri)
         {
             string responseString = null;
+
             using (var http = new HttpClient())
             {
-                var response = await http.GetAsync(uri);
-                if (response.IsSuccessStatusCode == true)
+                try
                 {
-                    responseString =  await response.Content.ReadAsStringAsync();
+                    var response = await http.GetAsync(uri);
+                    if (response.IsSuccessStatusCode == true)
+                    {
+                        responseString = await response.Content.ReadAsStringAsync();
+                    }
                 }
+                catch (Exception e)
+                {
+                    if (AppShell.Current != null)
+                    {
+                        AppShell.Current.NotifyMessage($"Network Connection error: \n{e.Message}");
+                    }
+                }
+
             }
             return responseString;
         }
