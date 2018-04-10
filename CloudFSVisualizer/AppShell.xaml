@@ -6,15 +6,22 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="using:CloudFSVisualizer.Model"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d">
 
     <NavigationView 
         x:Name="AppShellNavigationView"
         SelectionChanged="AppShellNavigationView_SelectionChanged"
         MenuItemsSource="{x:Bind Pages}">
-        <Frame
-            x:Name="AppContentFrame">
+        <Grid>
             
-        </Frame>
+            <Frame
+                x:Name="AppContentFrame"
+                IsTapEnabled="True"
+                Tapped="AppContentFrame_Tapped">
+            </Frame>
+            <controls:InAppNotification x:Name="InAppNotification" />
+        </Grid>
+
     </NavigationView>
 </Page>

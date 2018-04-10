@@ -24,10 +24,13 @@ namespace CloudFSVisualizer.Assets
     /// </summary>
     public sealed partial class AppShell : Page
     {
-        List<NavigationViewItem> Pages { get; set; }
+        public static AppShell Current { get; set; }
+        private static string LastNotifiedMessage { get; set; }
+        public List<NavigationViewItem> Pages { get; set; }
         public AppShell()
         {
             this.InitializeComponent();
+            Current = this;
             Pages = new List<NavigationViewItem>()
             {
                 new NavigationViewItem{Content = "HDFS Servers", Tag = typeof(HDFSServerPage), Icon = new FontIcon{ Glyph = "\xE130"} },
@@ -39,6 +42,15 @@ namespace CloudFSVisualizer.Assets
             AppContentFrame.CanGoBack ?
             AppViewBackButtonVisibility.Visible :
             AppViewBackButtonVisibility.Collapsed;
+        }
+
+        public void NotifyMessage(string message)
+        {
+            if (LastNotifiedMessage != message)
+            {
+                LastNotifiedMessage = message;
+                InAppNotification.Show(message);
+            }
         }
 
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
@@ -70,6 +82,11 @@ namespace CloudFSVisualizer.Assets
                 AppContentFrame.Navigate(selectedItem.Tag as Type);
                 AppShellNavigationView.Header = selectedItem.Content;
             }
+        }
+
+        private void AppContentFrame_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            AppShellNavigationView.IsPaneOpen = false;
         }
     }
 }
