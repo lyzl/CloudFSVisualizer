@@ -107,7 +107,7 @@ namespace CloudFSVisualizer.Model
         public async Task<List<string>> RunCommandShell(List<string> commandList, SshClient client)
         {
             List<string> result = new List<string>();
-            await Task.Run(() =>
+            await Task.Run(async () =>
              {
                  client.Connect();
 
@@ -115,7 +115,11 @@ namespace CloudFSVisualizer.Model
                  foreach (var command in commandList)
                  {
                      sc = client.CreateCommand(command);
-                     sc.Execute();
+                     var SCresult = sc.BeginExecute();
+                     while (SCresult.IsCompleted == false)
+                     {
+                         await Task.Delay(TimeSpan.FromSeconds(1));
+                     }
                      result.Add(sc.Result);
                  }
                  
@@ -145,6 +149,8 @@ namespace CloudFSVisualizer.Model
             @"sbin/stop-dfs.sh",
             @"sbin/start-balancer.sh",
             @"sbin/stop-balancer.sh",
+            @"sbin/start-yarn.sh",
+            @"sbin/stop-yarn.sh",
             @"sbin/test",
         };
 
@@ -172,6 +178,7 @@ namespace CloudFSVisualizer.Model
                 throw new Exception("The configuration file is not allowed to access");
             }
         }
+
         public async Task<NodeOperatingSystem> GetOperatingSystemInfoAsync()
         {
             string queryUrl = $@"http://{Host}:{ServicePort}/jmx?qry=java.lang:type=OperatingSystem";
@@ -210,6 +217,11 @@ namespace CloudFSVisualizer.Model
     public class YarnResourceManager: YarnNode
     {
         public override int ServicePort { get; protected set; } = 8088;
+
+        public async Task UploadAppFileFromStream(string FileName, Stream stream)
+        {
+            await UploadFileFromStreamAsync($@"{HadoopHomeDirectory}upload/{FileName}", stream);
+        }
     }
 
     public class YarnNodeManager: YarnNode
