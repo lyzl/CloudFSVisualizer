@@ -43,7 +43,6 @@ namespace CloudFSVisualizer
             this.Owner = status.owner;
             this.Name = file.Path.Split('/').Last();
         }
-
     }
 
     public sealed partial class HDFSFilePage : Page, INotifyPropertyChanged
