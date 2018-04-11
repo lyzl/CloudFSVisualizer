@@ -137,24 +137,28 @@ namespace CloudFSVisualizer
 
         private void FileTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.First() is string item)
+            if (e.AddedItems.Count > 0)
             {
-                switch (item)
+                if (e.AddedItems.First() is string item)
                 {
-                    case "Configuration":
-                        FileComboBox.ItemsSource = HDFSNode.AvaliableConfiguration;
-                        ExecutingButton.IsEnabled = false;
-                        SavingButton.IsEnabled = true;
-                        break;
-                    case "Script":
-                        FileComboBox.ItemsSource = HDFSNode.AvaliableScript;
-                        ExecutingButton.IsEnabled = true;
-                        SavingButton.IsEnabled = false;
-                        break;
-                    default:
-                        break;
+                    switch (item)
+                    {
+                        case "Configuration":
+                            FileComboBox.ItemsSource = HDFSNode.AvaliableConfiguration;
+                            ExecutingButton.IsEnabled = false;
+                            SavingButton.IsEnabled = true;
+                            break;
+                        case "Script":
+                            FileComboBox.ItemsSource = HDFSNode.AvaliableScript;
+                            ExecutingButton.IsEnabled = true;
+                            SavingButton.IsEnabled = false;
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
+            
         }
 
         private async void FileComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
