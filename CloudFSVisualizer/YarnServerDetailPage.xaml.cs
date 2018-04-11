@@ -63,7 +63,7 @@ namespace CloudFSVisualizer
                         QueryTimer.Change(Timeout.Infinite, Timeout.Infinite);
                         return;
                     }
-                    FSInfo = await CurrentServer.GetFSNamesystemAsync();
+                    //FSInfo = await CurrentServer.GetFSNamesystemAsync();
                 });
                 _queryLock.Set();
             },
@@ -99,13 +99,13 @@ namespace CloudFSVisualizer
         private void ServerDetailListGridView_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             var columns = Math.Ceiling(ActualWidth / 400);
-            //(ServerDetailListGridView.ItemsPanelRoot as ItemsWrapGrid).ItemWidth = e.NewSize.Width / columns;
+            (ServerDetailListGridView.ItemsPanelRoot as ItemsWrapGrid).ItemWidth = e.NewSize.Width / columns;
 
         }
 
         private void YarnSchedulerButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Frame.Navigate(typeof(YarnSchedulerPage), CurrentServer);
         }
 
         private void YarnConfigurationButton_Click(object sender, RoutedEventArgs e)
