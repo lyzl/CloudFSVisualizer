@@ -147,8 +147,8 @@
     <Compile Include="YarnNodePage.xaml.cs">
       <DependentUpon>YarnNodePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="YarnSchedularPage.xaml.cs">
-      <DependentUpon>YarnSchedularPage.xaml</DependentUpon>
+    <Compile Include="YarnSchedulerPage.xaml.cs">
+      <DependentUpon>YarnSchedulerPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="YarnServerDetailPage.xaml.cs">
       <DependentUpon>YarnServerDetailPage.xaml</DependentUpon>
@@ -257,7 +257,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="YarnSchedularPage.xaml">
+    <Page Include="YarnSchedulerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
