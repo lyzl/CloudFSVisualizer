@@ -59,20 +59,6 @@ namespace CloudFSVisualizer.Model
         public YarnResourceManager ResourceManager { get; set; }
         public List<YarnNodeManager> NodeManager { get; set; }
 
-        public async Task<FSNamesystem> GetFSNamesystemAsync()
-        {
-            string queryUrl = $@"http://{ResourceManager.Host}:8088/jmx?qry=Hadoop:service=NameNode,name=FSNamesystem";
-            var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
-            if (json == null)
-            {
-                return null;
-            }
-            JObject rootObject = JObject.Parse(json);
-            JToken infoToken = rootObject["beans"].Children().ToList().First();
-            var info = infoToken.ToObject<FSNamesystem>();
-            return info;
-        }
-
         public async Task<ClusterInfo> GetClusterInfoAsync()
         {
             string queryUrl = $@"http://{ResourceManager.Host}:8088/ws/v1/cluster/info";
@@ -98,6 +84,20 @@ namespace CloudFSVisualizer.Model
             JObject rootObject = JObject.Parse(json);
             JToken infoToken = rootObject["clusterMetrics"];
             var info = infoToken.ToObject<ClusterMetrics>();
+            return info;
+        }
+
+        public async Task<List<YarnApp>> GetApplications()
+        {
+            string queryUrl = $@"http://{ResourceManager.Host}:8088/ws/v1/cluster/apps";
+            var json = await NetworkManager.FetchStringDataFromUri(new Uri(queryUrl));
+            if (json == null)
+            {
+                return null;
+            }
+            JObject rootObject = JObject.Parse(json);
+            JToken infoToken = rootObject["apps"]["app"];
+            var info = infoToken.ToObject<List<YarnApp>>();
             return info;
         }
 
@@ -348,5 +348,129 @@ namespace CloudFSVisualizer.Model
     public class Scheduler
     {
         public SchedulerInfo schedulerInfo { get; set; }
+    }
+
+    public class Used
+    {
+        public int memory { get; set; }
+        public int vCores { get; set; }
+    }
+
+    public class Reserved
+    {
+        public int memory { get; set; }
+        public int vCores { get; set; }
+    }
+
+    public class Pending
+    {
+        public int memory { get; set; }
+        public int vCores { get; set; }
+    }
+
+    public class AmUsed
+    {
+        public int memory { get; set; }
+        public int vCores { get; set; }
+    }
+
+    public class AmLimit
+    {
+        public int memory { get; set; }
+        public int vCores { get; set; }
+    }
+
+    public class ResourceUsagesByPartition
+    {
+        public string partitionName { get; set; }
+        public Used used { get; set; }
+        public Reserved reserved { get; set; }
+        public Pending pending { get; set; }
+        public AmUsed amUsed { get; set; }
+        public AmLimit amLimit { get; set; }
+    }
+
+    public class ResourceInfo
+    {
+        public List<ResourceUsagesByPartition> resourceUsagesByPartition { get; set; }
+    }
+
+    public class AppTimeout
+    {
+        public string type { get; set; }
+        public string expiryTime { get; set; }
+        public int remainingTimeInSeconds { get; set; }
+    }
+
+    public class Timeouts
+    {
+        public List<AppTimeout> timeout { get; set; }
+    }
+
+    public class Capability
+    {
+        public int memory { get; set; }
+        public int vCores { get; set; }
+    }
+
+    public class ExecutionTypeRequest
+    {
+        public string executionType { get; set; }
+        public bool enforceExecutionType { get; set; }
+    }
+
+    public class ResourceRequest
+    {
+        public int priority { get; set; }
+        public string resourceName { get; set; }
+        public Capability capability { get; set; }
+        public int numContainers { get; set; }
+        public bool relaxLocality { get; set; }
+        public string nodeLabelExpression { get; set; }
+        public ExecutionTypeRequest executionTypeRequest { get; set; }
+        public bool enforceExecutionType { get; set; }
+    }
+
+    public class YarnApp
+    {
+        public string id { get; set; }
+        public string user { get; set; }
+        public string name { get; set; }
+        public string queue { get; set; }
+        public string state { get; set; }
+        public string finalStatus { get; set; }
+        public double progress { get; set; }
+        public string trackingUI { get; set; }
+        public string diagnostics { get; set; }
+        public long clusterId { get; set; }
+        public string applicationType { get; set; }
+        public string applicationTags { get; set; }
+        public int priority { get; set; }
+        public long startedTime { get; set; }
+        public long finishedTime { get; set; }
+        public long elapsedTime { get; set; }
+        public string amContainerLogs { get; set; }
+        public string amHostHttpAddress { get; set; }
+        public int allocatedMB { get; set; }
+        public int allocatedVCores { get; set; }
+        public int reservedMB { get; set; }
+        public int reservedVCores { get; set; }
+        public int runningContainers { get; set; }
+        public int memorySeconds { get; set; }
+        public int vcoreSeconds { get; set; }
+        public double queueUsagePercentage { get; set; }
+        public double clusterUsagePercentage { get; set; }
+        public int preemptedResourceMB { get; set; }
+        public int preemptedResourceVCores { get; set; }
+        public int numNonAMContainerPreempted { get; set; }
+        public int numAMContainerPreempted { get; set; }
+        public long preemptedMemorySeconds { get; set; }
+        public long preemptedVcoreSeconds { get; set; }
+        public string logAggregationStatus { get; set; }
+        public bool unmanagedApplication { get; set; }
+        public string amNodeLabelExpression { get; set; }
+        public ResourceInfo resourceInfo { get; set; }
+        public Timeouts timeouts { get; set; }
+        public List<ResourceRequest> resourceRequests { get; set; }
     }
 }
