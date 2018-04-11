@@ -1,0 +1,160 @@
+﻿<Page
+    x:Class="CloudFSVisualizer.YarnSchedulerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CloudFSVisualizer"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="using:CloudFSVisualizer.Model"
+    xmlns:telerikGrid="using:Telerik.UI.Xaml.Controls.Grid"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <local:ApplicationDroppingGridTextConverter x:Key="FileNameConvertor"/>
+    </Page.Resources>
+    <ScrollViewer Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel>
+            <telerikGrid:RadDataGrid
+                Margin="10"
+                x:Name="JobDataGrid"
+                ItemsSource="{x:Bind PresentList, Mode=OneWay}"
+                SelectionChanged= "JobDataGrid_SelectionChanged"
+                SelectionMode="Single">
+            </telerikGrid:RadDataGrid>
+            <Grid
+                x:Name="JobDetailGrid"
+                Visibility="Collapsed"
+                >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    Grid.Column="0"
+                    HorizontalAlignment="Center">
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">ID:</TextBlock>
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">User:</TextBlock>
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Queue:</TextBlock>
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">State:</TextBlock>
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">FinalStatus:</TextBlock>
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Progress:</TextBlock>
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">TrackingUI:</TextBlock>
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Diagnostics:</TextBlock>
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="1">
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.id, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.user, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.queue, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.state, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.finalStatus, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.progress, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.trackingUI, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.diagnostics, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="2"
+                    HorizontalAlignment="Center">
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Cluster ID:</TextBlock>
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Application Type:</TextBlock>
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">priority:</TextBlock>
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Start Time:</TextBlock>
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Finished Time:</TextBlock>
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Elapsed Time:</TextBlock>
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">AllocatedMB:</TextBlock>
+                    <TextBlock Style="{StaticResource AppTextBlockTitleStyle}">Allocated VCores:</TextBlock>
+                </StackPanel>
+                <StackPanel 
+                    Grid.Column="3">
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.clusterId, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.applicationType, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.priority, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.startedTime, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.finishedTime, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.elapsedTime, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.allocatedMB, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                    <TextBlock 
+                        Text="{x:Bind CurrentApp.allocatedVCores, Mode=OneWay}"
+                        Style="{StaticResource AppTextBlockContentStyle}"/>
+                </StackPanel>
+            </Grid>
+            <Grid
+                x:Name="NewAppDroppingGrid"
+                Width="500"
+                Height="300"
+                Margin="10"
+                CornerRadius="10"
+                DragOver="NewAppDroppingGrid_DragOver"
+                Drop="NewAppDroppingGrid_Drop"
+                AllowDrop="True">
+                <Line Stroke="#CCCCCC"
+                    StrokeDashArray="0.01 0.01"
+                    StrokeDashOffset="0.02"
+                    StrokeThickness="1000"
+                    X2="500"
+                    Y2="300" />
+                <Grid
+                    x:Name="BackgroundGrid"
+                    Margin="15"
+                    Background="#EEEEEE">
+                </Grid>
+                <TextBlock
+                    x:Name="FileNameTextBlock"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Text="{x:Bind CurrentAppFile ,Mode=OneWay, Converter={StaticResource FileNameConvertor}}"
+                    FontSize="24"
+                    Foreground="LightGray">
+                    Submit New Application
+                </TextBlock>
+            </Grid>
+            <Grid Margin="50,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    Grid.Column="0"
+                    PlaceholderText="Additonal Argument"
+                    x:Name="AdditionalArgumentTextBox"/>
+                <Button
+                    Grid.Column="1"
+                    x:Name="SubmitButton"
+                    Content="Submit"
+                    Width="80"
+                    Click="SubmitButton_Click"/>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
