@@ -23,7 +23,7 @@ namespace CloudFSVisualizer
 {
     public sealed partial class YarnNodeItemUC : UserControl, INotifyPropertyChanged
     {
-        public HDFSNode NodeItem { get { return this.DataContext as HDFSNode; } }
+        public YarnNode NodeItem { get { return this.DataContext as YarnNode; } }
         private NodeStatus status;
 
         public NodeStatus Status
